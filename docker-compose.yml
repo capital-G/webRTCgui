@@ -1,0 +1,14 @@
+version: '3.0'
+
+services:
+  janus:
+    build: janus
+  frontend:
+    build: remote_modular_frontend
+    ports:
+    - "8080:8080"
+    # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
+  backend:
+    build: remote_modular_backend
+    ports:
+    - "3000:3000"
