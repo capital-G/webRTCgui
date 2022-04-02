@@ -11,16 +11,36 @@ const io = require("socket.io")(http, {
 	},
 });
 
+var sliders = [];
 
 app.get('/', (req, res) => {
   res.send('<h1>Hey Socket.io</h1>');
 });
 
 io.on("connection", (socket) => {
-    console.log("a user connected");
-
     socket.on("disconnect", () => {
         console.log("User disconnected");
+    });
+
+    socket.on("getState", (msg) =>{
+      console.log("update state to new client");
+      socket.emit("sliders", sliders);
+    })
+
+    socket.on("reset", (msg) => {
+      sliders = [];
+    });
+
+    socket.on("registerSlider", (msg) => {
+      console.log("New slider " + msg);
+      sliders.push(msg);
+      socket.broadcast.emit("sliders", sliders);
+    });
+
+    socket.on("reset", (msg) => {
+      console.log("Reset sliders");
+      sliders = [];
+      socket.broadcast.emit("sliders", sliders);
     });
 
     socket.on("changeSlider", (msg) => {

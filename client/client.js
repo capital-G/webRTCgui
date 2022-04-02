@@ -21,6 +21,15 @@ var udpPort = new osc.UDPPort({
 });
 udpPort.open();
 
+udpPort.on("message", function (oscMessage) {
+    console.log(oscMessage);
+    socket.emit(
+        // remove leading "/"
+        oscMessage.address.substring(1),
+        oscMessage.args,
+    )
+});
+
 
 socket.on('connect', function () {
     console.log("socket connected");
@@ -29,7 +38,7 @@ socket.on('connect', function () {
 socket.on("slider change", (msg) => {
     console.log("Received message " + msg);
     udpPort.send({
-        address: "/hello/supercollider",
+        address: "/slider/",
         args: msg
     });
 });

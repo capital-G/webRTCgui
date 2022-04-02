@@ -8,6 +8,13 @@
         </div>
       </v-col>
     </v-row>
+    <ul id="example-1">
+      <h3>Automated values</h3>
+      <li v-for="slider in sliders" v-bind:key="slider.id">
+          <div class="text-caption">Value slider {{ slider }}</div>
+          <v-slider v-model="slider1" @mousedown="this.touched=true" @mouseup="this.touched=false" @change="updateToServer" color="orange" label="color"></v-slider>
+      </li>
+    </ul>
   </v-container>
 </template>
 
@@ -20,6 +27,7 @@ export default {
   data: () => ({
     slider1: 50,
     touched: false,
+    sliders: [],
   }),
 
   created() {
@@ -27,6 +35,13 @@ export default {
       console.log(data);
       this.slider1 = data;
     });
+
+    this.$socket.on("sliders", (data) => {
+      console.log("Received new slider");
+      this.sliders = data;
+    });
+
+    this.$socket.emit("getState");
   },
 
   watch: {
