@@ -19,7 +19,7 @@ services:
     depends_on:
       - backend
     ports:
-      - 57220:57220
+      - 57220:57220/udp
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"
     environment:
