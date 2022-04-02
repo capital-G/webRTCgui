@@ -11,7 +11,7 @@ const io = require("socket.io")(http, {
 	},
 });
 
-var sliders = [];
+var controllers = [];
 
 app.get('/', (req, res) => {
   res.send('<h1>Hey Socket.io</h1>');
@@ -24,28 +24,28 @@ io.on("connection", (socket) => {
 
     socket.on("getState", (msg) =>{
       console.log("update state to new client");
-      socket.emit("sliders", sliders);
+      socket.emit("controllers", controllers);
     })
 
     socket.on("reset", (msg) => {
-      sliders = [];
+      controllers = [];
     });
 
-    socket.on("registerSlider", (msg) => {
-      console.log("New slider " + msg);
-      sliders.push(msg);
-      socket.broadcast.emit("sliders", sliders);
+    socket.on("registerController", (msg) => {
+      console.log("New controller " + msg);
+      controllers.push(msg);
+      socket.broadcast.emit("controllers", controllers);
     });
 
     socket.on("reset", (msg) => {
-      console.log("Reset sliders");
-      sliders = [];
-      socket.broadcast.emit("sliders", sliders);
+      console.log("Reset controllers");
+      controllers = [];
+      socket.broadcast.emit("controllers", controllers);
     });
 
-    socket.on("changeSlider", (msg) => {
-        console.log("Received slider change: " + msg);
-        socket.broadcast.emit('slider change', msg);
+    socket.on("changeController", (msg) => {
+        console.log("Received controller change: " + msg);
+        socket.broadcast.emit('changeController', msg);
     });
   });
 

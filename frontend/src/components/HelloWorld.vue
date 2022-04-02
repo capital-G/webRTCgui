@@ -10,8 +10,8 @@
     </v-row>
     <ul id="example-1">
       <h3>Automated values</h3>
-      <li v-for="slider in sliders" v-bind:key="slider.id">
-          <div class="text-caption">Value slider {{ slider }}</div>
+      <li v-for="controller in controllers" v-bind:key="controller.name">
+          <div class="text-caption">Controller {{ controller.name }}</div>
           <v-slider v-model="slider1" @mousedown="this.touched=true" @mouseup="this.touched=false" @change="updateToServer" color="orange" label="color"></v-slider>
       </li>
     </ul>
@@ -27,18 +27,18 @@ export default {
   data: () => ({
     slider1: 50,
     touched: false,
-    sliders: [],
+    controllers: [],
   }),
 
   created() {
-    this.$socket.on("slider change", (data) => {
+    this.$socket.on("controllerChange", (data) => {
       console.log(data);
       this.slider1 = data;
     });
 
-    this.$socket.on("sliders", (data) => {
-      console.log("Received new slider");
-      this.sliders = data;
+    this.$socket.on("controllers", (data) => {
+      console.log("Received controller update");
+      this.controllers = data;
     });
 
     this.$socket.emit("getState");
@@ -48,7 +48,7 @@ export default {
     slider1(newSlider, oldSlider) {
       console.log("touched : " + this.touched + " Slider moved from " + oldSlider + " to " + newSlider);
       if(this.touched) {
-        this.$socket.emit("changeSlider", newSlider);
+        this.$socket.emit("changeController", newSlider);
       }
     }
   },
