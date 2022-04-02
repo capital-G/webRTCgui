@@ -4,18 +4,18 @@ services:
   janus:
     build: janus
   frontend:
-    build: remote_modular_frontend
+    build: frontend
     ports:
       - 8080:8080
       # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
   backend:
-    build: remote_modular_backend
+    build: backend
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
     ports:
       - 3000:3000
   client:
-    build: remote_modular_client
+    build: client
     depends_on:
       - backend
     ports:
