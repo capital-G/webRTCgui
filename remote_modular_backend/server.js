@@ -6,6 +6,7 @@ const io = require("socket.io")(http, {
 			"http://localhost:3001",
 			"http://localhost:4200",
 			"http://localhost:8080",
+      "http://client",
 		],
 	},
 });
@@ -29,6 +30,6 @@ io.on("connection", (socket) => {
   });
 
 
-http.listen(3000, () => {
+http.listen(3000, "0.0.0.0", () => {
   console.log('listening on *:3000');
 });
