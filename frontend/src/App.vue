@@ -1,31 +1,19 @@
 <template>
   <v-app>
     <v-main>
-      <HelloWorld/>
+      <ControlPanel/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-// import SocketioService from './services/socketio.service.js';
+import ControlPanel from './components/ControlPanel.vue'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    ControlPanel,
   },
-
-  created() {
-    // SocketioService.setupSocketConnection();
-  },
-  beforeUnmount() {
-    // SocketioService.disconnect();
-  },
-
-  data: () => ({
-    //
-  }),
 }
 </script>

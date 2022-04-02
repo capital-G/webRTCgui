@@ -24,16 +24,16 @@ udpPort.open();
 transformOscArray = (msg) => {
     // transforms [k1, v1, k2, v2, ...] to {k1: v1, k2: v2, ...}
     var o = {};
-    for(let i=0; i<=msg.length-1; i = i+2){
-        o[msg[i]] = msg[i+1];
+    for (let i = 0; i <= msg.length - 1; i = i + 2) {
+        o[msg[i]] = msg[i + 1];
     }
     return o;
 }
 
 udpPort.on("message", function (oscMessage) {
-    var jsonPayload = JSON.stringify(transformOscArray(oscMessage.args));
+    var jsonPayload = transformOscArray(oscMessage.args);
     console.log("Received message " + oscMessage);
-    console.log("Extracted " + jsonPayload);
+    console.log("Extracted " + JSON.stringify(jsonPayload));
     socket.emit(
         oscMessage.address.substring(1),
         jsonPayload,
@@ -48,7 +48,9 @@ socket.on("changeController", (msg) => {
     console.log("Received message " + msg);
     udpPort.send({
         address: "/WebRTCGUIbackchannel",
-        args: msg
+        // transform {k: v} to [k, v]
+        // args: [Object.keys(msg)[0], msg[ Object.keys(a)[0]]]
+        args: msg,
     });
 });
 
