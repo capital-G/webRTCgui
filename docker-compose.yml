@@ -7,10 +7,22 @@ services:
     build: remote_modular_frontend
     ports:
       - 8080:8080
-    # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
+      # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
   backend:
     build: remote_modular_backend
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
     ports:
       - 3000:3000
+  client:
+    build: remote_modular_client
+    depends_on:
+      - backend
+    ports:
+      - 57220:57220
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    environment:
+      - SC_HOST=host.docker.internal
+      - SC_PORT=57120
+      - BACKEND_ADDRESS=http://backend:3000
