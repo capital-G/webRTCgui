@@ -10,6 +10,9 @@
             @mouseup="this.touched = false"
             color="orange"
             label="color"
+            v-bind:min="this.min"
+            v-bind:max="this.max"
+            thumb-label
           ></v-slider>
         </div>
       </v-col>
@@ -23,7 +26,6 @@ export default {
       "name": String,
       "min": Number,
       "max": Number,
-      "abc": String,
   },
 
   data: () => ({

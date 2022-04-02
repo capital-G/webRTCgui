@@ -4,9 +4,8 @@
     <div v-for="controller in controllers" :key="controller.name">
       <controller-item
         v-bind:name="controller['name']"
-        v-bind:min=0
-        v-bind:max=1
-        abc="meine welt"
+        v-bind:min="controller.specMinVal"
+        v-bind:max="controller.specMaxVal"
       />
     </div>
   </v-container>
