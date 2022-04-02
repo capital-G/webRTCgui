@@ -30,7 +30,7 @@ WebRTCGUI {
 			if(controller.isNil, {
 				"received value (%) for unknown controller %".format(val, name).warn;
 			}, {
-				callback(val);
+				controller[\callback].(val);
 			});
 
 
@@ -44,7 +44,8 @@ WebRTCGUI {
 	}
 
 	newController {|name, spec, callback|
-		controllers[name] = (
+		name = name;
+		controllers[name.asSymbol] = (
 			spec: spec,
 			callback: callback
 		);
@@ -62,6 +63,6 @@ WebRTCGUI {
 	}
 
 	getController { |name|
-		^controllers[name];
+		^controllers[name.asSymbol];
 	}
 }
