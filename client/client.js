@@ -21,26 +21,35 @@ var udpPort = new osc.UDPPort({
 });
 udpPort.open();
 
+transformOscArray = (msg) => {
+    // transforms [k1, v1, k2, v2, ...] to {k1: v1, k2: v2, ...}
+    var o = {};
+    for(let i=0; i<=msg.length-1; i = i+2){
+        o[msg[i]] = msg[i+1];
+    }
+    return o;
+}
+
 udpPort.on("message", function (oscMessage) {
-    console.log(oscMessage);
+    var jsonPayload = JSON.stringify(transformOscArray(oscMessage.args));
+    console.log("Received message " + oscMessage);
+    console.log("Extracted " + jsonPayload);
     socket.emit(
-        // remove leading "/"
         oscMessage.address.substring(1),
-        oscMessage.args,
+        jsonPayload,
     )
 });
-
 
 socket.on('connect', function () {
     console.log("socket connected");
 });
 
-socket.on("slider change", (msg) => {
+socket.on("changeController", (msg) => {
     console.log("Received message " + msg);
     udpPort.send({
-        address: "/slider/",
+        address: "/WebRTCGUIbackchannel",
         args: msg
     });
 });
 
-console.log("Started client")
+console.log("Started client");
