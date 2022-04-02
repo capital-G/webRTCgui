@@ -8,6 +8,8 @@ services:
     ports:
       - 8080:8080
       # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
+    volumes:
+      - ./frontend:/root/remote_modular_frontend
   backend:
     build: backend
     healthcheck:
