@@ -16,7 +16,7 @@ Service | Folder | Description
 Backend | `.` | A express server which distributes the necessary messages. Can run on your local machine or remote machine.
 Frontend | `./frontend` | A frontend through which outside clients can interact. Should run on the same machine as the backend.
 Client | `.` | Client to translate WebRTC to SuperCollider OSC messages. Needs to run on your local machine.
-SuperCollider | `./webRTCgui` | A simple Quark with the class `WebRTCGUI`. Should be used on your local machine.
+SuperCollider | `./classes` | A simple Quark with the class `WebRTCGUI`. Should be used on your local machine.
 
 ## Installation
 
