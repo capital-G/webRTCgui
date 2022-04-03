@@ -62,6 +62,20 @@ WebRTCGUI {
 		);
 	}
 
+	removeController {|name|
+		var c = this.getController(name);
+		if(c.isNil, {
+			"Did not find controller %".format(name).postln;
+		}, {
+			client.sendMsg(
+				"/removeController",
+				"name", name,
+			);
+			controllers[name.asSymbol] = nil;
+		});
+
+	}
+
 	getController { |name|
 		^controllers[name.asSymbol];
 	}

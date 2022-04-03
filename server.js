@@ -49,6 +49,13 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("controllers", controllers);
   });
 
+  socket.on("removeController", (msg) => {
+    var controllerName = msg['name'];
+    console.log("Remove controller " + controllerName);
+    controllers = controllers.filter(e => e['name'] !== controllerName);
+    socket.broadcast.emit("controllers", controllers);
+  });
+
   socket.on("reset", (msg) => {
     console.log("Reset controllers");
     controllers = [];
