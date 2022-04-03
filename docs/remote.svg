@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="521px" preserveAspectRatio="none" style="width:604px;height:521px;background:#FFFFFF;" version="1.1" viewBox="0 0 604 521" width="604px" zoomAndPan="magnify"><defs/><g><!--MD5=[5bdf219cc3b76c81b283dcec53599e99]
+cluster Local--><g id="cluster_Local"><rect height="221" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="424" x="7" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="43" x="197.5" y="21.9951">Local</text></g><!--MD5=[9240c7b0536b67c6b0e932256ba3e78e]
+cluster localdocker--><g id="cluster_localdocker"><rect height="154" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="206" x="201" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="54" x="277" y="64.9951">docker</text></g><!--MD5=[aa2f05b2676d7d34ffa7e771fb7634f3]
+cluster client--><g id="cluster_client"><rect height="87" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="158" x="225" y="93"/><path d="M281,93 L281,102.2969 L271,112.2969 L225,112.2969 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="46" x="228" y="106.9951">client</text></g><!--MD5=[fa4a8b5932fc099cf3f477eeaff23c21]
+cluster SuperCollider--><g id="cluster_SuperCollider"><rect height="87" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="146" x="31" y="93"/><path d="M148,93 L148,102.2969 L138,112.2969 L31,112.2969 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="107" x="34" y="106.9951">SuperCollider</text></g><!--MD5=[979da56a7f83e2393dc758167ae295d0]
+cluster Server--><g id="cluster_Server"><rect height="238" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="390" x="208" y="277"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="51" x="377.5" y="291.9951">Server</text></g><!--MD5=[5ec7eedd57310648f8059ffb2621ca4b]
+cluster docker--><g id="cluster_docker"><rect height="171" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="174" x="400" y="320"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="54" x="460" y="334.9951">docker</text></g><!--MD5=[47c14c564e796a575e671c2b0469a7bb]
+cluster backend--><g id="cluster_backend"><rect height="104" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="126" x="424" y="363"/><path d="M501,363 L501,372.2969 L491,382.2969 L424,382.2969 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67" x="427" y="376.9951">backend</text></g><!--MD5=[4c651f763c28091aa679ffb04cf9ebf5]
+cluster nginx--><g id="cluster_nginx"><rect height="104" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="144" x="232" y="363"/><path d="M286,363 L286,372.2969 L276,382.2969 L232,382.2969 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="44" x="235" y="376.9951">nginx</text></g><!--MD5=[f7c9efcd556ab2c0d78e26644ad13127]
+entity LocalClient--><g id="elem_LocalClient"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125" x="241.5" y="128"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105" x="251.5" y="150.9951">client.js:57220</text></g><!--MD5=[ac483b804773c756ede21a8a3c337eed]
+entity sclang--><g id="elem_sclang"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114" x="47" y="128"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="57" y="150.9951">sclang:57120</text></g><!--MD5=[6d151e53a42aadf92577082572a20d90]
+entity express--><g id="elem_express"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="93" x="440.5" y="398"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="73" x="450.5" y="420.9951">«express»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="466.5" y="437.292">:3000</text></g><!--MD5=[788ffb02e69a71dda3642c9a267eda8f]
+entity webserver--><g id="elem_webserver"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="112" x="248" y="398"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="92" x="258" y="420.9951">«webserver»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="22" x="293" y="437.292">:80</text></g><!--MD5=[adc93f3c974996e7c3d7a37800bf067c]
+entity RemoteClients--><g id="elem_RemoteClients"><path d="M23.6372,409.923 C27.2984,403.7163 32.535,403.1996 36.566,409.542 C40.3522,403.8842 43.9855,404.6173 47.7452,409.5699 C51.0137,402.1196 57.1854,402.955 61.6381,408.2823 C65.384,401.7009 69.6117,402.4815 74.2844,407.2496 C77.7638,401.8408 83.4556,401.9277 86.3857,407.8369 C90.7764,402.5846 95.6091,401.8321 99.6977,408.1835 C103.1631,402.5876 106.9474,403.6792 110.3021,408.2984 C115.3083,401.5187 119.8446,402.5531 124.363,408.824 C128.4264,402.1791 134.1371,403.9337 137.4309,409.6384 C140.7412,404.0643 146.1702,403.0666 149.4596,409.6591 C159.0165,410.8805 163.2307,416.6269 158.3143,425.7921 C163.3437,434.0975 157.9061,440.2296 149.5842,440.7342 C146.2831,447.6303 141.2999,447.4726 136.7964,441.9748 C133.2518,448.6039 128.7175,449.6722 123.7825,443.3744 C120.0525,449.6991 116.0529,449.7952 110.9191,444.998 C106.9982,451.191 102.4187,450.9028 97.7264,445.9077 C93.8422,452.1738 90.046,452.5315 85.7846,446.2672 C82.5174,452.0255 77.3326,452.3572 74.1785,446.1574 C70.1058,450.8044 63.4651,451.5576 61.3001,444.1238 C57.8752,449.2235 51.9006,448.6575 49.2485,443.2385 C45.5511,448.7109 39.0143,448.323 36.1243,442.3154 C31.4049,448.9511 25.3796,447.3129 22.5699,440.4042 C14.1939,439.0193 12.8931,433.2343 17.0752,426.7833 C10.7389,418.195 13.9116,412.26 23.6372,409.923 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="29" y="429.4951">Remote Clients</text></g><!--MD5=[d7d7609cbeb90d2040e1fa59f4fd9d1d]
+link RemoteClients to webserver--><g id="link_RemoteClients_webserver"><path d="M161.371,424.5 C187.909,424.5 217.315,424.5 242.497,424.5 " fill="none" id="RemoteClients-webserver" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="247.804,424.5,238.804,420.5,242.804,424.5,238.804,428.5,247.804,424.5" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="156.103,424.5,165.103,428.5,161.103,424.5,165.103,420.5,156.103,424.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="174.5" y="417.5669">WebRTC</text></g><!--MD5=[b985bafd0d79e87642e2cadac53588ff]
+link express to webserver--><g id="link_express_webserver"><path d="M435.178,424.5 C413.512,424.5 388.165,424.5 365.559,424.5 " fill="none" id="express-webserver" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="360.399,424.5,369.399,428.5,365.399,424.5,369.399,420.5,360.399,424.5" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="440.315,424.5,431.315,420.5,435.315,424.5,431.315,428.5,440.315,424.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="18" x="391.25" y="417.5669">ws</text></g><!--MD5=[54faae7f848f8f3078d2f00c56b4c644]
+link LocalClient to webserver--><g id="link_LocalClient_webserver"><path d="M304,169.562 C304,218.846 304,336.197 304,392.424 " fill="none" id="LocalClient-webserver" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="304,397.67,308,388.67,304,392.67,300,388.67,304,397.67" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="304,164.296,300,173.296,304,169.296,308,173.296,304,164.296" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="305" y="257.0669">WebRTC</text></g><!--MD5=[62f3e46f5e203d8381a96914ea86c7e5]
+link sclang to LocalClient--><g id="link_sclang_LocalClient"><path d="M166.092,146 C188.318,146 213.477,146 236.164,146 " fill="none" id="sclang-LocalClient" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="241.267,146,232.267,142,236.267,146,232.267,150,241.267,146" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="161.044,146,170.044,150,166.044,146,170.044,142,161.044,146" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="27" x="187.75" y="139.0669">OSC</text></g><!--MD5=[4094e1764af90afd304f1c47ce05fad1]
+@startuml
+rectangle "Local" {
+  rectangle "docker" as localdocker {
+      frame client {
+        rectangle "client.js:57220" as LocalClient
+      }
+    }
+    frame "SuperCollider" {
+      rectangle "sclang:57120" as sclang
+    }
+}
+
+rectangle "Server" {
+  rectangle "docker" {
+  frame "backend" {
+    rectangle ":3000" <<express>> as express
+  }
+  }
+
+  frame "nginx" {
+    rectangle ":80" <<webserver>> as webserver
+  }
+
+}
+
+cloud "Remote Clients" as RemoteClients
+
+
+RemoteClients <-> webserver : "WebRTC"
+
+express <-> webserver : "ws"
+
+
+LocalClient <- -> webserver : "WebRTC"
+
+sclang <-> LocalClient : "OSC"
+@enduml
+
+PlantUML version 1.2022.3(Tue Mar 29 16:10:57 UTC 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

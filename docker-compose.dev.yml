@@ -1,9 +1,20 @@
 version: '3.0'
 
 services:
+  frontend:
+    build: frontend
+    ports:
+      - 8080:8080
+    volumes:
+      - ./frontend:/root/web_rtc_gui
+
   backend:
-    build: .
-    entrypoint: [ "node", "server.js"]
+    build:
+      context: .
+      dockerfile: Dockerfile.small
+    entrypoint: [ "node", "server.js" ]
+    volumes:
+      - ./server.js:/root/web_rtc_gui/server.js
     environment:
       - BACKEND_AUTH_TOKEN=change_me
     healthcheck:
@@ -12,7 +23,9 @@ services:
       - 3000:3000
 
   client:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.small
     depends_on:
       - backend
     volumes:

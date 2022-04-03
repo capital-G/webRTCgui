@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="443px" preserveAspectRatio="none" style="width:777px;height:443px;background:#FFFFFF;" version="1.1" viewBox="0 0 777 443" width="777px" zoomAndPan="magnify"><defs/><g><!--MD5=[5bdf219cc3b76c81b283dcec53599e99]
+cluster Local--><g id="cluster_Local"><rect height="398" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="604" x="167.2611" y="39.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="43" x="447.7611" y="54.561">Local</text></g><!--MD5=[9240c7b0536b67c6b0e932256ba3e78e]
+cluster localdocker--><g id="cluster_localdocker"><rect height="331" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="386" x="361.2611" y="82.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="54" x="527.2611" y="97.561">docker</text></g><!--MD5=[aa2f05b2676d7d34ffa7e771fb7634f3]
+cluster client--><g id="cluster_client"><rect height="106" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="158" x="565.2611" y="125.5659"/><path d="M621.2611,125.5659 L621.2611,134.8628 L611.2611,144.8628 L565.2611,144.8628 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="46" x="568.2611" y="139.561">client</text></g><!--MD5=[23cbaadc18b1780d966e07254adaec4d]
+cluster frontend--><g id="cluster_frontend"><rect height="106" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="156" x="385.2611" y="125.5659"/><path d="M466.2611,125.5659 L466.2611,134.8628 L456.2611,144.8628 L385.2611,144.8628 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="71" x="388.2611" y="139.561">frontend</text></g><!--MD5=[47c14c564e796a575e671c2b0469a7bb]
+cluster backend--><g id="cluster_backend"><rect height="106" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="154" x="430.2611" y="283.5659"/><path d="M507.2611,283.5659 L507.2611,292.8628 L497.2611,302.8628 L430.2611,302.8628 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67" x="433.2611" y="297.561">backend</text></g><!--MD5=[fa4a8b5932fc099cf3f477eeaff23c21]
+cluster SuperCollider--><g id="cluster_SuperCollider"><rect height="106" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="146" x="191.2611" y="125.5659"/><path d="M308.2611,125.5659 L308.2611,134.8628 L298.2611,144.8628 L191.2611,144.8628 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="107" x="194.2611" y="139.561">SuperCollider</text></g><!--MD5=[f7c9efcd556ab2c0d78e26644ad13127]
+entity LocalClient--><g id="elem_LocalClient"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125" x="581.7611" y="179.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105" x="591.7611" y="202.561">client.js:57220</text></g><!--MD5=[7815434c04e9667fca8bb5d42fcd8ded]
+entity LocalFrontend--><g id="elem_LocalFrontend"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="123" x="401.7611" y="179.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="411.7611" y="202.561">frontend:8080</text></g><!--MD5=[48c20b2610116689f0392fbf0a73abfd]
+entity LocalServer--><g id="elem_LocalServer"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="122" x="446.2611" y="337.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="456.2611" y="360.561">server.js:3000</text></g><!--MD5=[ac483b804773c756ede21a8a3c337eed]
+entity sclang--><g id="elem_sclang"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114" x="207.2611" y="179.5659"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="217.2611" y="202.561">sclang:57120</text></g><!--MD5=[adc93f3c974996e7c3d7a37800bf067c]
+entity RemoteClients--><g id="elem_RemoteClients"><path d="M18.8983,182.9889 C22.5595,176.7823 27.7961,176.2655 31.8271,182.6079 C35.6133,176.9501 39.2466,177.6832 43.0063,182.6358 C46.2748,175.1855 52.4465,176.0209 56.8992,181.3482 C60.6452,174.7668 64.8728,175.5474 69.5455,180.3155 C73.0249,174.9067 78.7167,174.9936 81.6468,180.9028 C86.0375,175.6505 90.8702,174.898 94.9588,181.2494 C98.4242,175.6535 102.2085,176.7451 105.5632,181.3644 C110.5694,174.5846 115.1057,175.619 119.6241,181.8899 C123.6875,175.2451 129.3982,176.9996 132.692,182.7044 C136.0023,177.1302 141.4313,176.1325 144.7207,182.725 C154.2776,183.9464 158.4918,189.6928 153.5754,198.8581 C158.6048,207.1634 153.1672,213.2955 144.8453,213.8001 C141.5442,220.6962 136.561,220.5385 132.0575,215.0407 C128.5129,221.6699 123.9786,222.7381 119.0436,216.4404 C115.3136,222.765 111.314,222.8611 106.1802,218.0639 C102.2593,224.2569 97.6798,223.9687 92.9875,218.9736 C89.1033,225.2397 85.3071,225.5974 81.0457,219.3331 C77.7785,225.0914 72.5937,225.4231 69.4396,219.2233 C65.3669,223.8703 58.7262,224.6235 56.5612,217.1898 C53.1363,222.2894 47.1617,221.7234 44.5096,216.3044 C40.8122,221.7768 34.2754,221.3889 31.3854,215.3814 C26.666,222.017 20.6407,220.3788 17.831,213.4702 C9.455,212.0852 8.1542,206.3002 12.3363,199.8493 C6,191.261 9.1727,185.3259 18.8983,182.9889 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="24.2611" y="202.561">Remote Clients</text></g><!--MD5=[dfc38870f9f9f1625afdfd8fb47a7fec]
+reverse link RemoteClients to LocalFrontend--><g id="link_RemoteClients_LocalFrontend"><path d="M92.885,169.4789 C109.8021,135.7189 143.3481,80.7229 191.2611,57.5659 C249.6841,29.3289 277.9851,31.1669 337.2611,57.5659 C394.0161,82.8429 435.9321,147.7169 453.7721,179.4879 " fill="none" id="RemoteClients-backto-LocalFrontend" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="90.51,174.2999,98.076,167.9947,92.72,169.8148,90.8999,164.4588,90.51,174.2999" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="26" x="263.2611" y="19.6328">http</text></g><!--MD5=[815e9c2b35f27bc2566d1c6f62930152]
+link RemoteClients to LocalServer--><g id="link_RemoteClients_LocalServer"><path d="M144.5781,222.3819 C159.8731,228.0289 176.1411,234.0219 191.2611,239.5659 C284.2141,273.6469 392.6821,313.0389 455.3211,335.7499 " fill="none" id="RemoteClients-LocalServer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="460.1231,337.4909,453.0258,330.6625,455.4226,335.7864,450.2986,338.1833,460.1231,337.4909" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="139.8641,220.6409,146.92,227.5122,144.5542,222.3738,149.6926,220.008,139.8641,220.6409" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="262.2611" y="263.6328">WebRTC</text></g><!--MD5=[17415aacae4f81887b31f475da3e3ad1]
+link LocalClient to LocalServer--><g id="link_LocalClient_LocalServer"><path d="M625.5331,219.8909 C599.3411,249.7159 552.0511,303.5639 525.9041,333.3369 " fill="none" id="LocalClient-LocalServer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="522.5141,337.1979,531.4587,333.0756,525.8137,333.4412,525.448,327.7962,522.5141,337.1979" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="629.0761,215.8569,620.1324,219.9812,625.7773,219.6143,626.1442,225.2593,629.0761,215.8569" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="596.2611" y="263.6328">WebRTC</text></g><!--MD5=[62f3e46f5e203d8381a96914ea86c7e5]
+link sclang to LocalClient--><g id="link_sclang_LocalClient"><path d="M275.6891,174.8379 C293.7511,141.7859 332.3561,81.7669 385.2611,57.5659 C448.3111,28.7239 479.3911,26.2739 541.2611,57.5659 C589.8961,82.1639 621.1751,141.7419 635.3791,174.6959 " fill="none" id="sclang-LocalClient" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="637.3511,179.3569,637.5297,169.5097,635.4036,174.7518,630.1615,172.6257,637.3511,179.3569" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="273.1741,179.5109,280.9606,173.4801,275.5429,175.1076,273.9153,169.69,273.1741,179.5109" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="27" x="437.7611" y="19.6328">OSC</text></g><!--MD5=[ad7e7ec0b1a0a335e426f13a26103176]
+@startuml
+rectangle "Local" {
+  rectangle "docker" as localdocker {
+      frame client {
+        rectangle "client.js:57220" as LocalClient
+      }
+      frame frontend {
+        rectangle "frontend:8080" as LocalFrontend
+      }
+      frame backend {
+        rectangle "server.js:3000" as LocalServer
+      }
+    }
+    frame "SuperCollider" {
+      rectangle "sclang:57120" as sclang
+    }
+}
+
+cloud "Remote Clients" as RemoteClients
+
+
+RemoteClients <- LocalFrontend : "http"
+
+RemoteClients <-> LocalServer : "WebRTC"
+
+
+LocalClient <- -> LocalServer : "WebRTC"
+
+sclang <-> LocalClient : "OSC"
+@enduml
+
+PlantUML version 1.2022.3(Tue Mar 29 16:10:57 UTC 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

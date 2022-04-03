@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile.full
     entrypoint: [ "node", "server.js"]
+    environment:
+      - BACKEND_AUTH_TOKEN
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/live"]
     ports:

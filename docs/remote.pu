@@ -1,0 +1,37 @@
+@startuml
+rectangle "Local" {
+  rectangle "docker" as localdocker {
+      frame client {
+        rectangle "client.js:57220" as LocalClient
+      }
+    }
+    frame "SuperCollider" {
+      rectangle "sclang:57120" as sclang
+    }
+}
+
+rectangle "Server" {
+  rectangle "docker" {
+  frame "backend" {
+    rectangle ":3000" <<express>> as express
+  }
+  }
+
+  frame "nginx" {
+    rectangle ":80" <<webserver>> as webserver
+  }
+
+}
+
+cloud "Remote Clients" as RemoteClients
+
+
+RemoteClients <-> webserver : "WebRTC"
+
+express <-> webserver : "ws"
+
+
+LocalClient <- -> webserver : "WebRTC"
+
+sclang <-> LocalClient : "OSC"
+@enduml
