@@ -2,9 +2,7 @@ version: '3.0'
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.full
+    build: .
     entrypoint: [ "node", "server.js"]
     environment:
       - BACKEND_AUTH_TOKEN
