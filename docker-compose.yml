@@ -10,6 +10,8 @@ services:
   backend:
     build: .
     entrypoint: [ "node", "server.js" ]
+    environment:
+      - BACKEND_AUTH_TOKEN=change_me
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/live"]
     ports:
@@ -24,3 +26,4 @@ services:
       - SC_HOST=host.docker.internal
       - SC_PORT=57120
       - BACKEND_ADDRESS=http://backend:3000
+      - BACKEND_AUTH_TOKEN=change_me

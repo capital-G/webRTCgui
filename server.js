@@ -1,5 +1,4 @@
 const express = require("express");
-// const app = require('express')();
 
 const app = express();
 
@@ -19,7 +18,17 @@ const io = require("socket.io")(http, {
   },
 });
 
+BACKEND_AUTH_TOKEN = process.env.BACKEND_AUTH_TOKEN || null;
+
+if(BACKEND_AUTH_TOKEN) {
+  console.log("Using auth token: \"" + BACKEND_AUTH_TOKEN + "\"");
+} else {
+  console.log("Run without auth token");
+}
+
 var controllers = {};
+
+// express.js
 
 app.get('/', (req, res) => {
   res.sendFile(path + "index.html");
@@ -29,7 +38,22 @@ app.get('/live', (req, res) => {
   res.sendStatus(200);
 });
 
+// socket.io
+
 io.on("connection", (socket) => {
+  const token = socket.handshake.auth.token;
+  var auth = true;
+  if(BACKEND_AUTH_TOKEN) {
+    if(BACKEND_AUTH_TOKEN!=token) {
+      auth = false;
+      if(BACKEND_AUTH_TOKEN != null && token != null) {
+        console.log("WARNING! Got wrong authentication for " + socket);
+      }
+    } else {
+      console.log("Client with proper credentials connected");
+    }
+  }
+
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
@@ -44,17 +68,21 @@ io.on("connection", (socket) => {
     socket.emit("changeController_" + name, controllers[name]);
   });
 
-  socket.on("reset", (msg) => {
-    controllers = [];
-  });
-
   socket.on("registerController", (msg) => {
-    console.log("New controller " + msg);
+    if(!auth) {
+      console.log("WARNING: Got unauthorized new controller statement");
+      return;
+    }
+    console.log("Publish new controller " + JSON.stringify(msg));
     controllers[msg['name']] = msg;
     socket.broadcast.emit("controllers", controllers);
   });
 
   socket.on("removeController", (msg) => {
+    if(!auth) {
+      console.log("WARNING: Got unauthorized remove controller statement");
+      return;
+    }
     var controllerName = msg['name'];
     console.log("Remove controller " + controllerName);
     delete controllers[controllerName];
@@ -62,6 +90,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("reset", (msg) => {
+    if(!auth) {
+      console.log("WARNING: Got unauthorized reset statement");
+      return;
+    }
     console.log("Reset controllers");
     controllers = {};
     socket.broadcast.emit("controllers", controllers);

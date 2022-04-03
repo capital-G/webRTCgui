@@ -5,13 +5,22 @@ const SC_PORT = process.env.SC_PORT || 57120
 const SC_HOST = process.env.SC_HOST || "localhost"
 const CLIENT_PORT = process.env.CLIENT_PORT || 57220
 const BACKEND_ADDRESS = process.env.BACKEND_ADDRESS || "http://localhost:3000"
+const BACKEND_AUTH_TOKEN = process.env.BACKEND_AUTH_TOKEN || null
 
 console.log("Start client")
 console.log("Backend address: " + BACKEND_ADDRESS)
 console.log("SuperCollider address: " + SC_HOST + ":" + SC_PORT)
 console.log("Client port: " + CLIENT_PORT)
 
-const socket = io(BACKEND_ADDRESS);
+var socket;
+
+if(BACKEND_AUTH_TOKEN) {
+    console.log("Auth token: \"" + BACKEND_AUTH_TOKEN + "\"");
+    socket = io(BACKEND_ADDRESS, {auth: {token: BACKEND_AUTH_TOKEN}});
+} else {
+    console.log("No auth token used");
+    socket = io(BACKEND_ADDRESS);
+}
 
 var udpPort = new osc.UDPPort({
     localAddress: "0.0.0.0",
@@ -43,8 +52,7 @@ jsonToOscArray = (msg) => {
 
 udpPort.on("message", function (oscMessage) {
     var jsonPayload = oscArrayToJson(oscMessage.args);
-    console.log("Received message " + oscMessage);
-    console.log("Extracted " + JSON.stringify(jsonPayload));
+    console.log("Received OSC message " + JSON.stringify(jsonPayload));
     socket.emit(
         oscMessage.address.substring(1),
         jsonPayload,
@@ -52,7 +60,7 @@ udpPort.on("message", function (oscMessage) {
 });
 
 socket.on('connect', function () {
-    console.log("socket connected");
+    console.log("Connected to server");
 });
 
 socket.on("changeController", (msg) => {
