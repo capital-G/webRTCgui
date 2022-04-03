@@ -36,10 +36,10 @@ export default {
   created() {
     this.$socket.on("changeController_"+this.name, (data) => {
       console.log(data);
-      this.value = data;
+      this.value = data['value'];
     });
 
-    this.$socket.emit("getState");
+    this.$socket.emit("getStateController", {name: this.name});
   },
 
   watch: {
@@ -51,7 +51,10 @@ export default {
           newValue
       );
       if (this.touched) {
-        this.$socket.emit("changeController", [this.name, newValue]);
+        this.$socket.emit("changeController", {
+          name: this.name,
+          value: newValue
+        });
       }
     },
   }

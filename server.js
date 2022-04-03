@@ -19,7 +19,7 @@ const io = require("socket.io")(http, {
   },
 });
 
-var controllers = [];
+var controllers = {};
 
 app.get('/', (req, res) => {
   res.sendFile(path + "index.html");
@@ -39,35 +39,42 @@ io.on("connection", (socket) => {
     socket.emit("controllers", controllers);
   })
 
+  socket.on("getStateController", (msg) => {
+    var name = msg['name'];
+    socket.emit("changeController_" + name, controllers[name]);
+  });
+
   socket.on("reset", (msg) => {
     controllers = [];
   });
 
   socket.on("registerController", (msg) => {
     console.log("New controller " + msg);
-    controllers.push(msg);
+    controllers[msg['name']] = msg;
     socket.broadcast.emit("controllers", controllers);
   });
 
   socket.on("removeController", (msg) => {
     var controllerName = msg['name'];
     console.log("Remove controller " + controllerName);
-    controllers = controllers.filter(e => e['name'] !== controllerName);
+    delete controllers[controllerName];
     socket.broadcast.emit("controllers", controllers);
   });
 
   socket.on("reset", (msg) => {
     console.log("Reset controllers");
-    controllers = [];
+    controllers = {};
     socket.broadcast.emit("controllers", controllers);
   });
 
   socket.on("changeController", (msg) => {
-    var name = msg[0];
-    var value = msg[1];
-    console.log("Received controller " + name + " change: " + msg);
-    socket.broadcast.emit("changeController_" + name, value);
-    socket.broadcast.emit("changeController", [name, value]);
+    const name = msg["name"];
+    console.log("Received controller " + name + " change: " + msg["value"]);
+
+    controllers[name]['value'] = msg["value"];
+
+    socket.broadcast.emit("changeController_" + name, controllers[name]);
+    socket.broadcast.emit("changeController", msg);
   });
 });
 

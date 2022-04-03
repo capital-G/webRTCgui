@@ -21,19 +21,29 @@ WebRTCGUI {
 		this.setupUpdate.();
 	}
 
+	*prArrayToEvent {|a|
+		var e = ();
+		a.pairsDo({|k, v|
+			e[k.asSymbol] = v;
+		});
+		^e;
+	}
+
 	setupUpdate {
 		OSCdef(oscDefName, {|msg|
-			var name = msg[1];
-			var val = msg[2];
-			var controller = this.getController(name);
+			var e = WebRTCGUI.prArrayToEvent(msg[1..]);
+			var controller = this.getController(e[\name]);
 
-			if(controller.isNil, {
-				"received value (%) for unknown controller %".format(val, name).warn;
-			}, {
-				controller[\callback].(val);
-			});
-
-
+			switch(e[\address].asSymbol,
+				"changeController".asSymbol, {
+					if(controller.isNil, {
+						"received value (%) for unknown controller %".format(e[\value], e[\name]).warn;
+					}, {
+						controller[\callback].(e[\value]);
+					});
+				},
+				{"Received message with unknow address: %".format(e).warn;}
+			);
 		}, path: "/WebRTCGUIbackchannel");
 	}
 
@@ -56,9 +66,9 @@ WebRTCGUI {
 			"name", name,
 			// hardcoded for now
 			"type", "slider",
+			"value", spec.storeArgs[4],
 			"specMinVal", spec.storeArgs[0],
 			"specMaxVal", spec.storeArgs[1],
-			"specDefault", spec.storeArgs[4],
 		);
 	}
 
