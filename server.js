@@ -25,6 +25,10 @@ app.get('/', (req, res) => {
   res.sendFile(path + "index.html");
 });
 
+app.get('/live', (req, res) => {
+  res.sendStatus(200);
+});
+
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected");

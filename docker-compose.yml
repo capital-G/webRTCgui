@@ -5,14 +5,13 @@ services:
     build: frontend
     ports:
       - 8080:8080
-      # entrypoint: [ "/bin/sh", "-c", "sleep 10000"]
     volumes:
       - ./frontend:/root/remote_modular_frontend
   backend:
     build: .
     entrypoint: [ "node", "server.js" ]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/live"]
     ports:
       - 3000:3000
   client:
