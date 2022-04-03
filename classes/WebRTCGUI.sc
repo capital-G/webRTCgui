@@ -2,9 +2,9 @@ WebRTCGUI {
 	var clientHost;
 	var clientPort;
 
-	var <client;
+	var client;
 	var <controllers;
-	var <oscDefName;
+	var oscDefName;
 
 
 	*new {|clientHost="localhost", clientPort=57220|
@@ -18,7 +18,7 @@ WebRTCGUI {
 		client = NetAddr(clientHost, clientPort);
 		controllers = ();
 		oscDefName = "WebRTCGUIbackchannel_%_%".format(clientHost, clientPort);
-		this.setupUpdate.();
+		this.prSetupUpdate.();
 	}
 
 	*prArrayToEvent {|a|
@@ -29,7 +29,7 @@ WebRTCGUI {
 		^e;
 	}
 
-	setupUpdate {
+	prSetupUpdate {
 		OSCdef(oscDefName, {|msg|
 			var e = WebRTCGUI.prArrayToEvent(msg[1..]);
 			var controller = this.getController(e[\name]);
@@ -54,6 +54,7 @@ WebRTCGUI {
 	}
 
 	newController {|name, spec, callback|
+		callback = callback ? {};
 		name = name;
 		controllers[name.asSymbol] = (
 			spec: spec,
