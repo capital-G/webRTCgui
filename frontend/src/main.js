@@ -4,9 +4,11 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { io } from 'socket.io-client';
 
-loadFonts()
+const socketAddress = process.env.VUE_APP_BACKEND_ADDRESS || location.protocol + "//" + location.hostname + ":3000";
 
-const socket = io(process.env.VUE_APP_SOCKET_ENDPOINT);
+loadFonts();
+
+const socket = io(socketAddress);
 socket.emit('changeSlider', 'Hello there from Vue.');
 
 const app = createApp(App);
