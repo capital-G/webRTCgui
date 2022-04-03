@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-WORKDIR /root/remote_modular_frontend
+WORKDIR /root/web_rtc_gui
 
 COPY package.json .
 
