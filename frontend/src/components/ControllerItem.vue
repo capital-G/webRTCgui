@@ -6,8 +6,6 @@
           <div class="text-caption">{{ name }}</div>
           <v-slider
             v-model="value"
-            @mousedown="this.touched = true"
-            @mouseup="this.touched = false"
             color="orange"
             label="color"
             v-bind:min="this.min"
@@ -29,13 +27,13 @@ export default {
   },
 
   data: () => ({
-    touched: false,
+    automaticUpdate: false,
     value: 50,
   }),
 
   created() {
     this.$socket.on("changeController_"+this.name, (data) => {
-      console.log(data);
+      this.automaticUpdate = true;
       this.value = data['value'];
     });
 
@@ -44,19 +42,16 @@ export default {
 
   watch: {
     value(newValue) {
-      console.log(
-        "touched : " +
-          this.name +
-          " Slider moved to " +
-          newValue
-      );
-      if (this.touched) {
+      if (!this.automaticUpdate) {
         this.$socket.emit("changeController", {
           name: this.name,
           value: newValue
         });
       }
+      // we release the lock after this check again
+      // because this call is async
+      this.automaticUpdate = false;
     },
-  }
+  },
 };
 </script>
