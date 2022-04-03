@@ -1,0 +1,25 @@
+{
+  "name": "web_rtc_gui",
+  "version": "0.1.0",
+  "description": "Allows to dynamically create GUIs for the web via SuperCollider",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/capital-G/webRTCgui.git"
+  },
+  "author": "Dennis Scheiba",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/capital-G/webRTCgui/issues"
+  },
+  "homepage": "https://github.com/capital-G/webRTCgui#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "osc": "^2.4.2",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
+  }
+}
