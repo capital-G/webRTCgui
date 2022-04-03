@@ -1,0 +1,149 @@
+TITLE:: WebRTCGUI
+summary:: GUI for browsers with remote sync capablities.
+categories:: GUI
+related:: Classes/NdefGui
+
+DESCRIPTION::
+WebRTCGUI allows you to publish a GUI to the internet or your local network while every instance of the GUI is also in sync.
+The GUI can be acceesed via a Browser.
+For specifics on the setup please check LINK::https://github.com/capital-G/webRTCgui::.
+
+A quick example:
+
+code::
+w = WebRTCGUI();
+
+(
+w.newController(
+	// internal name for supercollider but also label
+	name: \myControl,
+	// specs of the GUI controller
+	spec: ControlSpec(minval: 0.0, maxval: 100.0, default: 20.0),
+	// what to do when a new value is entered on the GUI
+	callback: {|v| "new value for myControl: %".format(v).postln; }
+);
+)
+
+// reset local and remote GUI
+w.reset;
+::
+
+CLASSMETHODS::
+
+PRIVATE:: prArrayToEvent
+
+METHOD:: new
+Connects to a "local client" which translates the WebRTC messages to OSC and vice versa.
+argument:: clientHost
+Host under which the local client is running
+argument:: clientPort
+Port under which the local client is reachable
+
+
+INSTANCEMETHODS::
+
+METHOD:: controllers
+Returns an Event with all registered controllers.
+
+METHOD:: getController
+Gets a controller by name
+argument:: name
+Can be a link::Classes/String:: or a link::Classes/Symbol:: as it will transfered to a link::Classes/Symbol::.
+
+METHOD:: reset
+Resets the remote GUI and removes all controllers.
+
+METHOD:: init
+
+METHOD:: newController
+Creates a new controller on the remote GUI.
+argument:: name
+Name of the Slider. Will be used internally for reference but also as label.
+argument:: spec
+link::Classes/ControlSpec:: of the desired controller.
+argument:: callback
+A function which will get called when a new value is received.
+The first and only parameter is the received value.
+A naive function would be
+CODE::
+{|v| v.postln;}
+::
+
+PRIVATE:: prSetupUpdate
+
+METHOD:: removeController
+Allows to remove a controller by name from the remote GUI.
+argument:: name
+Name of the controller.
+
+EXAMPLES::
+
+code::
+(
+// create a synth with some args
+Ndef(\mySynth, {|out|
+	var sig;
+	var freq = \freq.kr(200.0, lag: 0.1);
+	sig = SinOsc.ar(
+		freq: freq * [0.0, 0.01].midiratio * (1+SinOsc.kr(freq, mul: \freqModDepth.kr(0.0, lag: 0.1))),
+		phase: LFDNoise3.kr(2.0!2, mul: pi)
+	) * SinOsc.ar(\ampModFreq.kr(50.0, lag: 0.1));
+	sig = sig * \amp.kr(0.2);
+	Out.ar(out, sig);
+}).play.gui;
+)
+
+// setup WebRTCGUI client
+w = WebRTCGUI();
+
+(
+// register a new GUI element on the website
+// which controls the freq of \mySynth
+w.newController(
+	name: \freq,
+	spec: ControlSpec(
+		minval: 20.0,
+		maxval: 400.0,
+		default: 200.0
+	),
+	callback: {|v| Ndef(\mySynth).set(\freq, v)}
+);
+)
+
+(
+// another one for the frequency modulation
+w.newController(
+	name: \freqModDepth,
+	spec: ControlSpec(
+		minval: -10.0,
+		maxval: 10.0,
+		default: 0.0
+	),
+	callback: {|v| Ndef(\mySynth).set(\freqModDepth, v)}
+);
+)
+
+(
+// a third element for the amp modulation
+w.newController(
+	name: \ampModFreq,
+	spec: ControlSpec(
+		minval: 20.0,
+		maxval: 200.0,
+		default: 50.0
+	),
+	callback: {|v| Ndef(\mySynth).set(\ampModFreq, v)}
+);
+)
+
+
+// now remove the freq GUI element
+w.removeController(\freq)
+
+
+//reset everything again
+w.reset;
+
+// stop synth
+Ndef(\mySynth).clear;
+::
