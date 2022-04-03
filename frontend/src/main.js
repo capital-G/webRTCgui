@@ -4,12 +4,23 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { io } from 'socket.io-client';
 
-const socketAddress = process.env.VUE_APP_BACKEND_ADDRESS || location.protocol + "//" + location.hostname + ":3000";
+/*
+Checks wether vue app and socketio server are on the same service
+*/
+var socketAddress = process.env.VUE_APP_BACKEND_ADDRESS || "0"
+
+if(parseInt(socketAddress)==0) {
+    console.log("Socket server runs on same service as frontend");
+    socketAddress = location.protocol + "//" + location.hostname + ":" + location.port;
+} else {
+    console.log("Socket server runs on different service");
+}
+
+console.log("Use socket address " + socketAddress);
 
 loadFonts();
 
 const socket = io(socketAddress);
-socket.emit('changeSlider', 'Hello there from Vue.');
 
 const app = createApp(App);
 app.use(vuetify);

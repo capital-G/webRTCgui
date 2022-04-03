@@ -1,4 +1,12 @@
-const app = require('express')();
+const express = require("express");
+// const app = require('express')();
+
+const app = express();
+
+const path = __dirname + '/frontend_build/';
+
+app.use(express.static(path));
+
 const http = require('http').createServer(app);
 const io = require("socket.io")(http, {
   cors: {
@@ -14,7 +22,7 @@ const io = require("socket.io")(http, {
 var controllers = [];
 
 app.get('/', (req, res) => {
-  res.send('<h1>Hey Socket.io</h1>');
+  res.sendFile(path + "index.html");
 });
 
 io.on("connection", (socket) => {
