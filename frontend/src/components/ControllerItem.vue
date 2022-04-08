@@ -11,7 +11,15 @@
             v-bind:min="this.min"
             v-bind:max="this.max"
             thumb-label
+            v-if="type=='slider'"
           ></v-slider>
+          <v-btn
+            v-model="value"
+            @click="buttonPress()"
+            color="orange"
+            label="color"
+            v-if="type=='button'"
+          >{{ name }}</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -24,6 +32,7 @@ export default {
       "name": String,
       "min": Number,
       "max": Number,
+      "type": String,
   },
 
   data: () => ({
@@ -53,5 +62,14 @@ export default {
       this.automaticUpdate = false;
     },
   },
+
+  methods: {
+    buttonPress() {
+      this.$socket.emit("changeController", {
+        name: this.name,
+        value: 1.0,
+      });
+    }
+  }
 };
 </script>

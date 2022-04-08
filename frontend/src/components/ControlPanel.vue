@@ -6,6 +6,7 @@
         v-bind:name="controller['name']"
         v-bind:min="controller.specMinVal"
         v-bind:max="controller.specMaxVal"
+        v-bind:type="controller.type"
       />
     </div>
   </v-container>

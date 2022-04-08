@@ -14,7 +14,7 @@ code::
 w = WebRTCGUI();
 
 (
-w.newController(
+w.newSlider(
 	// internal name for supercollider but also label
 	name: \myControl,
 	// specs of the GUI controller
@@ -44,6 +44,7 @@ INSTANCEMETHODS::
 
 METHOD:: controllers
 Returns an Event with all registered controllers.
+All kind of elements on the GUI like sliders or buttons are regarded as controllers.
 
 METHOD:: getController
 Gets a controller by name
@@ -55,8 +56,8 @@ Resets the remote GUI and removes all controllers.
 
 METHOD:: init
 
-METHOD:: newController
-Creates a new controller on the remote GUI.
+METHOD:: newSlider
+Creates a new slider on the remote GUI.
 argument:: name
 Name of the Slider. Will be used internally for reference but also as label.
 argument:: spec
@@ -68,6 +69,14 @@ A naive function would be
 CODE::
 {|v| v.postln;}
 ::
+
+METHOD:: newButton
+Creates a new button on the remot GUI.
+argument:: name
+Name of the Button.
+argument:: callback
+A function that will get called when button is pressed.
+See link::Classes/WebRTCGUI#newSlider:: for details.
 
 PRIVATE:: prSetupUpdate
 
@@ -99,7 +108,7 @@ w = WebRTCGUI();
 (
 // register a new GUI element on the website
 // which controls the freq of \mySynth
-w.newController(
+w.newSlider(
 	name: \freq,
 	spec: ControlSpec(
 		minval: 20.0,
@@ -112,7 +121,7 @@ w.newController(
 
 (
 // another one for the frequency modulation
-w.newController(
+w.newSlider(
 	name: \freqModDepth,
 	spec: ControlSpec(
 		minval: -10.0,
@@ -125,7 +134,7 @@ w.newController(
 
 (
 // a third element for the amp modulation
-w.newController(
+w.newSlider(
 	name: \ampModFreq,
 	spec: ControlSpec(
 		minval: 20.0,
@@ -139,6 +148,19 @@ w.newController(
 
 // now remove the freq GUI element
 w.removeController(\freq)
+
+(
+// add a kick which will be played upon button press
+SynthDef(\kick, {|out|
+	var env = EnvGen.kr(Env(levels: [1, 0], times: [0.2]), doneAction: Done.freeSelf);
+	Out.ar(out, SinOsc.ar(env.exprange(20, 200)) * env * \amp.kr(0.4)!2);
+}).add;
+)
+
+(
+// add button
+w.newButton(\kick, callback: {Synth(\kick)})
+)
 
 
 //reset everything again

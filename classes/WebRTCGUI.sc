@@ -53,7 +53,7 @@ WebRTCGUI {
 		"Resetted controllers".postln;
 	}
 
-	newController {|name, spec, callback|
+	newSlider {|name, spec, callback|
 		callback = callback ? {};
 		name = name;
 		controllers[name.asSymbol] = (
@@ -70,6 +70,19 @@ WebRTCGUI {
 			"value", spec.storeArgs[4],
 			"specMinVal", spec.storeArgs[0],
 			"specMaxVal", spec.storeArgs[1],
+		);
+	}
+
+	newButton {|name, callback|
+		controllers[name.asSymbol] = (
+			callback: callback,
+		);
+
+		client.sendMsg(
+			"/registerController",
+			"name", name,
+			"type", "button",
+			"value", 0,
 		);
 	}
 
