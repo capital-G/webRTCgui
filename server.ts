@@ -1,4 +1,7 @@
-const express = require("express");
+import * as express from "express";
+import {createServer} from "http";
+import {Server} from "socket.io";
+import {ServerToClientEvents, ClientToServerEvents, Controller} from "./communication";
 
 const app = express();
 
@@ -6,10 +9,11 @@ const path = __dirname + '/frontend_build/';
 
 app.use(express.static(path));
 
-const http = require('http').createServer(app);
-const io = require("socket.io")(http, {
+const http = createServer(app);
+
+const io = new Server<ClientToServerEvents, ServerToClientEvents>(http, {
   cors: {
-    origins: [
+    origin: [
       "http://localhost:3001",
       "http://localhost:4200",
       "http://localhost:8080",
@@ -18,7 +22,7 @@ const io = require("socket.io")(http, {
   },
 });
 
-BACKEND_AUTH_TOKEN = process.env.BACKEND_AUTH_TOKEN || null;
+const BACKEND_AUTH_TOKEN = process.env.BACKEND_AUTH_TOKEN || null;
 
 if(BACKEND_AUTH_TOKEN) {
   console.log("Using auth token: \"" + BACKEND_AUTH_TOKEN + "\"");
@@ -26,7 +30,7 @@ if(BACKEND_AUTH_TOKEN) {
   console.log("Run without auth token");
 }
 
-var controllers = {};
+var controllers: { [id: string] : Controller; }
 
 // express.js
 
@@ -42,7 +46,8 @@ app.get('/live', (req, res) => {
 
 io.on("connection", (socket) => {
   const token = socket.handshake.auth.token;
-  var auth = true;
+  let auth: boolean = true;
+
   if(BACKEND_AUTH_TOKEN) {
     if(BACKEND_AUTH_TOKEN!=token) {
       auth = false;
@@ -58,38 +63,38 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 
-  socket.on("getState", (msg) => {
+  socket.on("getState", () => {
     console.log("update state to new client");
     socket.emit("controllers", controllers);
   })
 
-  socket.on("getStateController", (msg) => {
-    var name = msg['name'];
-    socket.emit("changeController_" + name, controllers[name]);
+  socket.on("getStateController", (name) => {
+    socket.emit("changeController", controllers[name]);
   });
 
-  socket.on("registerController", (msg) => {
+  socket.on("registerController", (controller) => {
     if(!auth) {
       console.log("WARNING: Got unauthorized new controller statement");
       return;
     }
-    console.log("Publish new controller " + JSON.stringify(msg));
-    controllers[msg['name']] = msg;
+
+    // console.log("Publish new controller " + JSON.stringify(msg));
+    // controllers[msg['name']] = msg;
+    controllers[controller.name] = controller;
     socket.broadcast.emit("controllers", controllers);
   });
 
-  socket.on("removeController", (msg) => {
+  socket.on("removeController", (controller) => {
     if(!auth) {
       console.log("WARNING: Got unauthorized remove controller statement");
       return;
     }
-    var controllerName = msg['name'];
-    console.log("Remove controller " + controllerName);
-    delete controllers[controllerName];
+    console.log("Remove controller " + controller.name);
+    delete controllers[controller.name];
     socket.broadcast.emit("controllers", controllers);
   });
 
-  socket.on("reset", (msg) => {
+  socket.on("reset", () => {
     if(!auth) {
       console.log("WARNING: Got unauthorized reset statement");
       return;
@@ -99,14 +104,12 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("controllers", controllers);
   });
 
-  socket.on("changeController", (msg) => {
-    const name = msg["name"];
-    console.log("Received controller " + name + " change: " + msg["value"]);
+  socket.on("changeController", (controller) => {
+    console.log(`Received controller ${controller.name} change: ${controller.value}`);
 
-    controllers[name]['value'] = msg["value"];
+    controllers[controller.name].value = controller.value;
 
-    socket.broadcast.emit("changeController_" + name, controllers[name]);
-    socket.broadcast.emit("changeController", msg);
+    socket.broadcast.emit("changeController", controller);
   });
 });
 
