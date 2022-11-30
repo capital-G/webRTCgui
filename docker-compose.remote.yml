@@ -3,7 +3,7 @@ version: '3.0'
 services:
   backend:
     build: .
-    entrypoint: [ "node", "server.js"]
+    entrypoint: [ "npm", "run", "server"]
     environment:
       - BACKEND_AUTH_TOKEN
     healthcheck:

@@ -29,8 +29,10 @@ COPY package-lock.json .
 
 RUN npm install
 
-COPY server.js .
+COPY server.ts .
 
-COPY client.js .
+COPY client.ts .
 
-ENTRYPOINT [ "node", "client.js" ]
+COPY communication.ts .
+
+ENTRYPOINT [ "node", "client.ts" ]

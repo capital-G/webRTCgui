@@ -3,7 +3,7 @@ version: '3.0'
 services:
   backend:
     build: .
-    entrypoint: [ "node", "server.js"]
+    entrypoint: [ "npm", "run", "server"]
     environment:
       - BACKEND_AUTH_TOKEN=change_me
     healthcheck:
@@ -16,7 +16,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./client.js:/root/web_rtc_gui/client.js
+      - ./client.ts:/root/web_rtc_gui/client.ts
+      - ./communication.ts:/root/web_rtc_gui/communication.ts
     ports:
       - 57220:57220/udp
     environment:
