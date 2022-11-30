@@ -12,9 +12,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.small
-    entrypoint: [ "node", "server.js" ]
+    entrypoint: [ "npm", "run", "server" ]
     volumes:
-      - ./server.js:/root/web_rtc_gui/server.js
+      - ./server.ts:/root/web_rtc_gui/server.ts
+      - ./communication.ts:/root/web_rtc_gui/communication.ts
     environment:
       - BACKEND_AUTH_TOKEN=change_me
     healthcheck:
@@ -29,7 +30,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./client.js:/root/web_rtc_gui/client.js
+      - ./client.ts:/root/web_rtc_gui/client.ts
+      - ./communication.ts:/root/web_rtc_gui/communication.ts
     ports:
       - 57220:57220/udp
     environment:
