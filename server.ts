@@ -67,10 +67,6 @@ export class SuperColliderWebRtcServer {
         }
       }
     
-      socket.on("disconnect", () => {
-        console.log("User disconnected");
-      });
-    
       socket.on("getState", () => {
         console.log("update state to new client");
         socket.emit("controllers", this.controllers);
