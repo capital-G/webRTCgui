@@ -1,119 +1,135 @@
 import * as express from "express";
-import {createServer} from "http";
-import {Server} from "socket.io";
+import {createServer, Server} from "http";
+import {Server as SocketServer} from "socket.io";
 import {ServerToClientEvents, ClientToServerEvents, Controller} from "./communication";
 
-const app = express();
+export class SuperColliderWebRtcServer {
+  app: express.Express;
+  path = __dirname + '/frontend/dist/';
+  http: Server;
+  io: SocketServer<ClientToServerEvents, ServerToClientEvents>;
+  authToken = process.env.BACKEND_AUTH_TOKEN || null;
 
-const path = __dirname + '/frontend_build/';
+  controllers: { [id: string] : Controller; }
 
-app.use(express.static(path));
+  constructor() {
+    this.app = express();
+    this.app.use(express.static(this.path));
 
-const http = createServer(app);
+    this.http = createServer(this.app);
 
-const io = new Server<ClientToServerEvents, ServerToClientEvents>(http, {
-  cors: {
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:4200",
-      "http://localhost:8080",
-      "http://client",
-    ],
-  },
-});
+    this.io = new SocketServer<ClientToServerEvents, ServerToClientEvents>(this.http, {
+      cors: {
+        origin: [
+          "http://localhost:3001",
+          "http://localhost:4200",
+          "http://localhost:8080",
+          "http://client",
+        ],
+      },
+    });
 
-const BACKEND_AUTH_TOKEN = process.env.BACKEND_AUTH_TOKEN || null;
-
-if(BACKEND_AUTH_TOKEN) {
-  console.log("Using auth token: \"" + BACKEND_AUTH_TOKEN + "\"");
-} else {
-  console.log("Run without auth token");
-}
-
-var controllers: { [id: string] : Controller; }
-
-// express.js
-
-app.get('/', (req, res) => {
-  res.sendFile(path + "index.html");
-});
-
-app.get('/live', (req, res) => {
-  res.sendStatus(200);
-});
-
-// socket.io
-
-io.on("connection", (socket) => {
-  const token = socket.handshake.auth.token;
-  let auth: boolean = true;
-
-  if(BACKEND_AUTH_TOKEN) {
-    if(BACKEND_AUTH_TOKEN!=token) {
-      auth = false;
-      if(BACKEND_AUTH_TOKEN != null && token != null) {
-        console.log("WARNING! Got wrong authentication for " + socket);
-      }
+    if(this.authToken) {
+      console.log(`Using auth token: "${this.authToken}"`);
     } else {
-      console.log("Client with proper credentials connected");
+      console.log("Run without auth token");
     }
+
+    this.controllers = {};
+    
+    this.setupApp();
+    this.setupSocket();
+  };
+
+  setupApp() {
+    this.app.get('/', (req, res) => {
+      res.sendFile(this.path + "index.html");
+    });
+    
+    this.app.get('/live', (req, res) => {
+      res.sendStatus(200);
+    }); 
   }
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
+  setupSocket() {
+    this.io.on("connection", (socket) => {
+      const token = socket.handshake.auth.token;
+      let auth: boolean = true;
+    
+      if(this.authToken) {
+        if(this.authToken!=token) {
+          auth = false;
+          if(this.authToken != null && token != null) {
+            console.log("WARNING! Got wrong authentication for " + socket);
+          }
+        } else {
+          console.log("Client with proper credentials connected");
+        }
+      }
+    
+      socket.on("disconnect", () => {
+        console.log("User disconnected");
+      });
+    
+      socket.on("getState", () => {
+        console.log("update state to new client");
+        socket.emit("controllers", this.controllers);
+      })
+    
+      socket.on("getStateController", (name) => {
+        socket.emit("changeController", this.controllers[name]);
+      });
+    
+      socket.on("registerController", (controller) => {
+        if(!auth) {
+          console.log("WARNING: Got unauthorized new controller statement");
+          return;
+        }
+    
+        // console.log("Publish new controller " + JSON.stringify(msg));
+        // controllers[msg['name']] = msg;
+        // console.log(controllers);
+        // console.log(controller);
+        // server.controllers[controller.name] = controller;
+        this.controllers[controller.name] = controller;
+        socket.broadcast.emit("controllers", this.controllers);
+      });
+    
+      socket.on("removeController", (controller) => {
+        if(!auth) {
+          console.log("WARNING: Got unauthorized remove controller statement");
+          return;
+        }
+        console.log("Remove controller " + controller.name);
+        delete this.controllers[controller.name];
+        socket.broadcast.emit("controllers", this.controllers);
+      });
+    
+      socket.on("reset", () => {
+        if(!auth) {
+          console.log("WARNING: Got unauthorized reset statement");
+          return;
+        }
+        console.log("Reset controllers");
+        this.controllers = {};
+        socket.broadcast.emit("controllers", this.controllers);
+      });
+    
+      socket.on("changeController", (controller) => {
+        console.log(`Received ${controller.name}: ${controller.value}`);
+    
+        this.controllers[controller.name].value = controller.value;
+    
+        socket.broadcast.emit("changeController", controller);
+      });
+    });
+  }
+}
 
-  socket.on("getState", () => {
-    console.log("update state to new client");
-    socket.emit("controllers", controllers);
-  })
-
-  socket.on("getStateController", (name) => {
-    socket.emit("changeController", controllers[name]);
-  });
-
-  socket.on("registerController", (controller) => {
-    if(!auth) {
-      console.log("WARNING: Got unauthorized new controller statement");
-      return;
-    }
-
-    // console.log("Publish new controller " + JSON.stringify(msg));
-    // controllers[msg['name']] = msg;
-    controllers[controller.name] = controller;
-    socket.broadcast.emit("controllers", controllers);
-  });
-
-  socket.on("removeController", (controller) => {
-    if(!auth) {
-      console.log("WARNING: Got unauthorized remove controller statement");
-      return;
-    }
-    console.log("Remove controller " + controller.name);
-    delete controllers[controller.name];
-    socket.broadcast.emit("controllers", controllers);
-  });
-
-  socket.on("reset", () => {
-    if(!auth) {
-      console.log("WARNING: Got unauthorized reset statement");
-      return;
-    }
-    console.log("Reset controllers");
-    controllers = {};
-    socket.broadcast.emit("controllers", controllers);
-  });
-
-  socket.on("changeController", (controller) => {
-    console.log(`Received controller ${controller.name} change: ${controller.value}`);
-
-    controllers[controller.name].value = controller.value;
-
-    socket.broadcast.emit("changeController", controller);
-  });
-});
 
 
-http.listen(3000, "0.0.0.0", () => {
-  console.log('listening on *:3000');
+const server = new SuperColliderWebRtcServer();
+
+server.http.listen(3000, "0.0.0.0", () => {
+  console.log('listening on 0.0.0.0:3000');
 });
