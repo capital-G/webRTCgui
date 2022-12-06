@@ -55,8 +55,6 @@ function controllerToOscArray(controller: Controller): Array<any> {
 };
 
 
-osc.on
-
 udpPort.on("message", function (oscMessage: any) {
     var jsonPayload = oscToDict(oscMessage.args);
     console.log(`Received OSC message ${JSON.stringify(jsonPayload)}`);
@@ -71,7 +69,7 @@ socket.on('connect', function () {
 });
 
 socket.on("changeController", (controller) => {
-    console.log(`Received message ${controller.name}: ${controller.value}`);
+    console.log(`Received ${controller.name}: ${controller.value}`);
     var oscPayload = controllerToOscArray(controller);
     oscPayload.push("address");
     oscPayload.push("changeController");
