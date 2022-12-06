@@ -68,8 +68,8 @@ WebRTCGUI {
 			// hardcoded for now
 			"type", "slider",
 			"value", spec.storeArgs[4],
-			"specMinVal", spec.storeArgs[0],
-			"specMaxVal", spec.storeArgs[1],
+			"min", spec.storeArgs[0],
+			"max", spec.storeArgs[1],
 		);
 	}
 
