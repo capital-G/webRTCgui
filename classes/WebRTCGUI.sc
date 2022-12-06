@@ -86,6 +86,21 @@ WebRTCGUI {
 		);
 	}
 
+	newText {|name, spec, callback|
+		callback = callback ? {};
+		controllers[name.asSymbol] = (
+			spec: spec,
+			callback: callback,
+		);
+
+		client.sendMsg(
+			"/registerController",
+			"name", name,
+			"type", "text",
+			"value", spec.default ? "",
+		);
+	}
+
 	removeController {|name|
 		var c = this.getController(name);
 		if(c.isNil, {

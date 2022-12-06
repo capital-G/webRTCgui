@@ -12,7 +12,13 @@ export interface ButtonController {
     type: "button"
 }
 
-export type Controller = SliderController | ButtonController;
+export interface TextController {
+    name: string;
+    value: string;
+    type: "text";
+}
+
+export type Controller = SliderController | ButtonController | TextController;
 
 export interface ServerToClientEvents {
     controllers: (controllers: {[id: string] : Controller}) => void;

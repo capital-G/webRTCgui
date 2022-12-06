@@ -4,6 +4,7 @@ import { Controller } from "../../../communication";
 import { Ref, ref } from "vue";
 import ControllerSlider from "./ControllerSlider.vue"
 import ControllerButton from "./ControllerButton.vue";
+import ControllerText from "./ControllerText.vue";
 
 const controllers: Ref<{ [id: string]: Controller }> = ref({});
 
@@ -28,6 +29,10 @@ socket.emit("getState");
       <controller-button
         v-bind:controller="controller"
         v-if="controller.type==='button'"
+      />
+      <controller-text
+        v-bind:controller="controller"
+        v-if="controller.type==='text'"
       />
     </div>
   </v-container>
