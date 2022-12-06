@@ -7,9 +7,9 @@ import { io } from 'socket.io-client';
 /*
 Checks wether vue app and socketio server are on the same service
 */
-var socketHost = process.env.VUE_APP_BACKEND_HOST || "0"
-var socketPort = process.env.VUE_APP_BACKEND_PORT || "0"
-var socketAddress = "";
+const socketHost = process.env.VUE_APP_BACKEND_HOST || "0"
+const socketPort = process.env.VUE_APP_BACKEND_PORT || "0"
+let socketAddress = "";
 
 if(parseInt(socketHost)==0) {
     console.log("Socket server runs on same host as frontend");

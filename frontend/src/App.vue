@@ -6,14 +6,15 @@
   </v-app>
 </template>
 
-<script>
-import ControlPanel from './components/ControlPanel.vue'
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import ControlPanel from './components/ControlPanel.vue';
 
-export default {
-  name: 'App',
-
+@Options({
   components: {
     ControlPanel,
   },
+})
+export default class App extends Vue { 
 }
 </script>
