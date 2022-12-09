@@ -16,7 +16,7 @@ services:
       context: js
     entrypoint: ["npm", "run", "client"]
     depends_on:
-      - backend
+      - server
     ports:
       - 57220:57220/udp
     environment:
