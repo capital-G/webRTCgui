@@ -1,5 +1,11 @@
 # Changelog
 
+## next
+
+* fix reverse proxy example
+* remove web-font loader as dependency
+* Fix `docker-compose.yml` depends_on bug
+
 ## v0.2.0
 
 * Move from JavaScript to TypeScript
