@@ -67,7 +67,7 @@ Assuming you want to have the website accessible via the internet you need a rem
 ```shell
 # set a password for the server and start the server
 BACKEND_AUTH_TOKEN=someBetterPassword \
-docker compose -f docker-compose.server.yml up --build
+docker-compose -f docker-compose.server.yml up --build
 ```
 
 By appending a `-d` flag the service will start in the background.
