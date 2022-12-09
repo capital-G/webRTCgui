@@ -88,6 +88,7 @@ WebRTCGUI {
 
 	newText {|name, spec, callback|
 		callback = callback ? {};
+		spec = spec ? ();
 		controllers[name.asSymbol] = (
 			spec: spec,
 			callback: callback,
@@ -98,6 +99,7 @@ WebRTCGUI {
 			"name", name,
 			"type", "text",
 			"value", spec.default ? "",
+			"monospace", spec.monospace.asBoolean ? true,
 		);
 	}
 
