@@ -1,8 +1,8 @@
 (
   name: "WebRTCGUI",
-  summary: "GUI for browsers with remote sync capablities.",
-  version: "0.1.0",
-  schelp: "DemonWidgets",
+  summary: "GUI for browsers with remote sync capabilities.",
+  version: "0.2.0",
+  schelp: "WebRTCGUI",
   url: "https://github.com/capital-G/webRTCgui",
   license: "GPL-2.0",
   copyright: "Dennis Scheiba, 2022"
