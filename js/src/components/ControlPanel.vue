@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import type { Ref } from "vue";
+import { ref } from "vue";
 import { useSocketIO } from "../services/socketio.service";
-import { Controller } from "../communication";
-import { Ref, ref } from "vue";
-import ControllerSlider from "./ControllerSlider.vue"
+import type { Controller } from "../communication";
+import ControllerSlider from "./ControllerSlider.vue";
 import ControllerButton from "./ControllerButton.vue";
 import ControllerText from "./ControllerText.vue";
 
@@ -22,17 +23,17 @@ socket.emit("getState");
   <v-container>
     <h2>Controller Panel</h2>
     <div v-for="controller in controllers" :key="controller.name">
-      <controller-slider
-        v-bind:controller="controller"
-        v-if="controller.type==='slider'"
+      <ControllerSlider
+        v-if="controller.type === 'slider'"
+        :controller="controller"
       />
-      <controller-button
-        v-bind:controller="controller"
-        v-if="controller.type==='button'"
+      <ControllerButton
+        v-if="controller.type === 'button'"
+        :controller="controller"
       />
-      <controller-text
-        v-bind:controller="controller"
-        v-if="controller.type==='text'"
+      <ControllerText
+        v-if="controller.type === 'text'"
+        :controller="controller"
       />
     </div>
   </v-container>

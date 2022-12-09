@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { defineProps, ref, Ref, PropType } from "vue";
+import type { PropType, Ref } from "vue";
+import { defineProps, ref } from "vue";
 import { useSocketIO } from "../services/socketio.service";
-import { TextController } from "../communication";
+import type { TextController } from "../communication";
+
+const props = defineProps({
+  controller: { type: Object as PropType<TextController>, required: true }
+});
 
 const { socket } = useSocketIO();
 
-const props = defineProps({
-  controller: {type: Object as PropType<TextController>, required: true}
-});
-
-var value: Ref<string> = ref(props.controller.value);
+const value: Ref<string> = ref(props.controller.value);
 
 async function updateText() {
-    // as we can not update props in vue
-    // we instead copy it and use it to set the values
-    var c = structuredClone({...props.controller});
-    c.value = value.value;
-    socket.emit("changeController", c);
+  // as we can not update props in vue
+  // we instead copy it and use it to set the values
+  const c = structuredClone({ ...props.controller });
+  c.value = value.value;
+  socket.emit("changeController", c);
 }
 </script>
 
@@ -25,11 +26,13 @@ async function updateText() {
     <v-row class="text-center">
       <v-col>
         <div>
-          <div class="text-caption">{{ $props.controller.name }}</div>
+          <div class="text-caption">
+            {{ $props.controller.name }}
+          </div>
           <v-textarea
             v-model="value"
-            @change="updateText()"
             color="orange"
+            @change="updateText()"
           />
         </div>
       </v-col>

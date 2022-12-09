@@ -1,17 +1,19 @@
-import { Express} from 'express';
-import express from 'express';
-import {createServer, Server} from "http";
-import {Server as SocketServer} from "socket.io";
-import {ServerToClientEvents, ClientToServerEvents, Controller} from "./communication";
+import type { Server } from "http";
+import { createServer } from "http";
+import type { Express } from "express";
+import express from "express";
+import { Server as SocketServer } from "socket.io";
+import type { ClientToServerEvents, Controller, ServerToClientEvents } from "./communication";
 
 export class SuperColliderWebRtcServer {
   app: Express;
-  path = __dirname + '/../dist/';
+  // eslint-disable-next-line n/no-path-concat
+  path = `${__dirname}/../dist/`;
   http: Server;
   io: SocketServer<ClientToServerEvents, ServerToClientEvents>;
   authToken = process.env.BACKEND_AUTH_TOKEN || null;
 
-  controllers: { [id: string] : Controller; }
+  controllers: { [id: string]: Controller };
 
   constructor() {
     this.app = express();
@@ -25,16 +27,15 @@ export class SuperColliderWebRtcServer {
           "http://localhost:3001",
           "http://localhost:4200",
           "http://localhost:8080",
-          "http://client",
-        ],
-      },
+          "http://client"
+        ]
+      }
     });
 
-    if(this.authToken) {
+    if (this.authToken)
       console.log(`Using auth token: "${this.authToken}"`);
-    } else {
+    else
       console.log("Run without auth token");
-    }
 
     this.controllers = {};
 
@@ -43,11 +44,11 @@ export class SuperColliderWebRtcServer {
   }
 
   setupApp() {
-    this.app.get('/', (req, res) => {
-      res.sendFile(this.path + "index.html");
+    this.app.get("/", (req, res) => {
+      res.sendFile(`${this.path}index.html`);
     });
 
-    this.app.get('/live', (req, res) => {
+    this.app.get("/live", (req, res) => {
       res.sendStatus(200);
     });
   }
@@ -55,15 +56,15 @@ export class SuperColliderWebRtcServer {
   setupSocket() {
     this.io.on("connection", (socket) => {
       const token = socket.handshake.auth.token;
-      let auth: boolean = true;
+      let auth = true;
 
-      if(this.authToken) {
-        if(this.authToken!=token) {
+      if (this.authToken) {
+        if (this.authToken !== token) {
           auth = false;
-          if(this.authToken != null && token != null) {
-            console.log("WARNING! Got wrong authentication for " + socket);
-          }
-        } else {
+          if (this.authToken != null && token != null)
+            console.log(`WARNING! Got wrong authentication for ${socket}`);
+        }
+        else {
           console.log("Client with proper credentials connected");
         }
       }
@@ -71,39 +72,34 @@ export class SuperColliderWebRtcServer {
       socket.on("getState", () => {
         console.log("update state to new client");
         socket.emit("controllers", this.controllers);
-      })
+      });
 
       socket.on("getStateController", (name) => {
         socket.emit("changeController", this.controllers[name]);
       });
 
       socket.on("registerController", (controller) => {
-        if(!auth) {
+        if (!auth) {
           console.log("WARNING: Got unauthorized new controller statement");
           return;
         }
 
-        // console.log("Publish new controller " + JSON.stringify(msg));
-        // controllers[msg['name']] = msg;
-        // console.log(controllers);
-        // console.log(controller);
-        // server.controllers[controller.name] = controller;
         this.controllers[controller.name] = controller;
         socket.broadcast.emit("controllers", this.controllers);
       });
 
       socket.on("removeController", (controller) => {
-        if(!auth) {
+        if (!auth) {
           console.log("WARNING: Got unauthorized remove controller statement");
           return;
         }
-        console.log("Remove controller " + controller.name);
+        console.log(`Remove controller ${controller.name}`);
         delete this.controllers[controller.name];
         socket.broadcast.emit("controllers", this.controllers);
       });
 
       socket.on("reset", () => {
-        if(!auth) {
+        if (!auth) {
           console.log("WARNING: Got unauthorized reset statement");
           return;
         }
@@ -123,10 +119,8 @@ export class SuperColliderWebRtcServer {
   }
 }
 
-
-
 const server = new SuperColliderWebRtcServer();
 
 server.http.listen(3000, "0.0.0.0", () => {
-  console.log('listening on 0.0.0.0:3000');
+  console.log("listening on 0.0.0.0:3000");
 });
