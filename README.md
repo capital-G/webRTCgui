@@ -2,7 +2,7 @@
 
 > *webRTCgui* allows to publish, modify and sync dynamic GUI elements / parameters via the internet (or local network) from within SuperCollider.
 
-![Screen recording](docs/screen_recording.gif)
+![Screen recording](HelpSource/Classes/images/screen_recording.gif)
 
 This GUI parameters syncs across multiple devices, also across the internet.
 
@@ -58,7 +58,7 @@ Other users within your network can also access the website via `http://<your-lo
 
 To understand the connections better here is a schematic on how the services are connected in a local setup.
 
-![Local setup](docs/local.svg)
+![Local setup](HelpSource/Classes/images/local.svg)
 
 #### Remote server and local client
 
@@ -94,7 +94,7 @@ and from there on you can continue with the SuperCollider documentation (see abo
 
 Here are the schematics for a remote workflow with reverse proxy.
 
-![Remote setup](docs/remote.svg)
+![Remote setup](HelpSource/Classes/images/remote.svg)
 
 ### Setup a nginx reverse proxy
 
@@ -161,7 +161,7 @@ Please install and setup [`pre-commit`](https://pre-commit.com/) before committi
 
 The schematics of the dev environment.
 
-![Dev schematic](docs/dev.svg)
+![Dev schematic](HelpSource/Classes/images/dev.svg)
 
 ## License
 
