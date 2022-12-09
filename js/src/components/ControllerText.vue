@@ -25,7 +25,7 @@ async function updateText() {
   <v-container>
     <v-row class="text-center">
       <v-col>
-        <div>
+        <div :class="{ monospace: props.controller.monospace }">
           <div class="text-caption">
             {{ $props.controller.name }}
           </div>
@@ -39,3 +39,9 @@ async function updateText() {
     </v-row>
   </v-container>
 </template>
+
+<style scoped>
+  .monospace {
+    font-family: monospace;
+  }
+</style>

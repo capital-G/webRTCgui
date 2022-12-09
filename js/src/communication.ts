@@ -16,6 +16,7 @@ export interface TextController {
   name: string
   value: string
   type: "text"
+  monospace: boolean
 }
 
 export type Controller = SliderController | ButtonController | TextController;
