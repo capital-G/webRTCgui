@@ -71,12 +71,24 @@ CODE::
 ::
 
 METHOD:: newButton
-Creates a new button on the remot GUI.
+Creates a new button on the remote GUI.
 argument:: name
 Name of the Button.
 argument:: callback
 A function that will get called when button is pressed.
 See link::Classes/WebRTCGUI#newSlider:: for details.
+
+METHOD:: newText
+Creates a new text area on the remote GUI.
+argument:: name
+Name of the Textarea.
+argument:: callback
+A function that will get called when button is pressed.
+See link::Classes/WebRTCGUI#newSlider:: for details.
+argument:: text
+Init value of the text area
+argument:: monospace
+If set to true the textarea is monospace which is handy when sharing code.
 
 PRIVATE:: prSetupUpdate
 

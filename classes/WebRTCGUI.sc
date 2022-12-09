@@ -86,11 +86,10 @@ WebRTCGUI {
 		);
 	}
 
-	newText {|name, spec, callback|
+	newText {|name, callback, text="", monospace=true|
 		callback = callback ? {};
-		spec = spec ? ();
 		controllers[name.asSymbol] = (
-			spec: spec,
+			spec: (),
 			callback: callback,
 		);
 
@@ -98,8 +97,8 @@ WebRTCGUI {
 			"/registerController",
 			"name", name,
 			"type", "text",
-			"value", spec.default ? "",
-			"monospace", spec.monospace.asBoolean ? true,
+			"value", text,
+			"monospace", monospace,
 		);
 	}
 
