@@ -48,6 +48,7 @@ In order to try it out on your local machine you can type
 ```shell
 docker-compose up --build
 ```
+
 Once everything spun up you can access the frontend on <http://localhost:3000> and start creating controls from SuperCollider by reading the docs
 
 ```supercollider
@@ -112,6 +113,9 @@ server {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+
       add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
       client_max_body_size 0;
 
