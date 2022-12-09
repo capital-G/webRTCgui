@@ -2,7 +2,8 @@ version: '3.0'
 
 services:
   backend:
-    build: .
+    build:
+      context: js
     entrypoint: [ "npm", "run", "server"]
     environment:
       - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-change_me}
