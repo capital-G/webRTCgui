@@ -5,7 +5,7 @@ services:
     build: .
     entrypoint: [ "npm", "run", "server"]
     environment:
-      - BACKEND_AUTH_TOKEN
+      - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-change_me}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/live"]
     ports:

@@ -1,11 +1,14 @@
-FROM node:14-alpine
+FROM node:14-alpine AS build
 
 WORKDIR /root/web_rtc_gui
 
-COPY package.json .
+ADD package.json .
+ADD package-lock.json .
 
 RUN npm install
 
 COPY . .
 
-ENTRYPOINT [ "npm", "run", "serve", "--host 0.0.0.0" ]
+RUN [ "npm", "run",  "build"]
+
+ENTRYPOINT [ "npm", "run", "server" ]

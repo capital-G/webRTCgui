@@ -3,12 +3,12 @@ version: '3.0'
 services:
   client:
     build:
-      context: .
-      dockerfile: Dockerfile.small
+      context: js
+    entrypoint: ["npm", "run", "client"]
     ports:
       - 57220:57220/udp
     environment:
-      - SC_HOST=host.docker.internal
-      - SC_PORT=57120
-      - BACKEND_ADDRESS
-      - BACKEND_AUTH_TOKEN
+      - SC_HOST=${SC_HOST:-host.docker.internal}
+      - SC_PORT=${SC_PORT:-57120}
+      - BACKEND_ADDRESS=${BACKEND_ADDRESS:-http://host.docker.internal:3000}
+      - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-change_me}

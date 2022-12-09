@@ -6,7 +6,7 @@ import {ServerToClientEvents, ClientToServerEvents, Controller} from "./communic
 
 export class SuperColliderWebRtcServer {
   app: Express;
-  path = __dirname + '/frontend/dist/';
+  path = __dirname + '/../dist/';
   http: Server;
   io: SocketServer<ClientToServerEvents, ServerToClientEvents>;
   authToken = process.env.BACKEND_AUTH_TOKEN || null;
