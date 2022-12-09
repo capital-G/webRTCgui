@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint",
     "client": "ts-node --esm src/client.ts",
     "server": "ts-node --esm src/server.ts",
-    "local": "npm run client & npm run server & npm run serve"
+    "local-dev": "npm run client & npm run server & npm run serve"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
