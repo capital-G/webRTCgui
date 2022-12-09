@@ -12,7 +12,7 @@ module.exports = defineConfig({
 
   pluginOptions: {
     vuetify: {
-      // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-    }
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
   }
 })

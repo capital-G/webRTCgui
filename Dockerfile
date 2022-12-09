@@ -33,6 +33,6 @@ COPY server.ts .
 
 COPY client.ts .
 
-COPY communication.ts .
+COPY frontend/src/communication.ts frontend/src/communication.ts
 
 ENTRYPOINT [ "node", "client.ts" ]

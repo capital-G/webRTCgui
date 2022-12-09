@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, ref, Ref, watch, PropType } from "vue";
 import { useSocketIO } from "../services/socketio.service";
-import { SliderController } from "../../../communication";
+import { SliderController } from "../communication";
 
 const { socket } = useSocketIO();
 
@@ -31,7 +31,6 @@ watch(value, sendUpdate);
           <v-slider
             v-model="value"
             color="orange"
-            label="color"
             :min="$props.controller.min"
             :max="$props.controller.max"
             thumb-label

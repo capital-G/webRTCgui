@@ -23,7 +23,7 @@ if(BACKEND_AUTH_TOKEN) {
     console.log("No auth token used");
 }
 
-var udpPort = new osc.UDPPort({
+const udpPort = new osc.UDPPort({
     localAddress: "0.0.0.0",
     localPort: CLIENT_PORT,
     remoteAddress: SC_HOST,
@@ -33,7 +33,7 @@ udpPort.open();
 
 function oscToDict(msg: [any]): {} {
     // transforms [k1, v1, k2, v2, ...] to {k1: v1, k2: v2, ...}
-    var o = {};
+    const o = {};
     for (let i = 0; i <= msg.length - 1; i = i + 2) {
         // @ts-ignore
         o[msg[i]] = msg[i + 1];
@@ -44,7 +44,7 @@ function oscToDict(msg: [any]): {} {
 function controllerToOscArray(controller: Controller): Array<any> {
     // transforms {k1: v1, k2: v2, ...} to [k1, v1, k2, v2, ...]
     // please no nested/deep objects
-    var a = [];
+    const a = [];
 
     let key: keyof typeof controller;
     for (key in controller) {
@@ -52,11 +52,11 @@ function controllerToOscArray(controller: Controller): Array<any> {
         a.push(controller[key]);
     }
     return a;
-};
+}
 
 
 udpPort.on("message", function (oscMessage: any) {
-    var jsonPayload = oscToDict(oscMessage.args);
+    const jsonPayload = oscToDict(oscMessage.args);
     console.log(`Received OSC message ${JSON.stringify(jsonPayload)}`);
     socket.emit(
         oscMessage.address.substring(1),
@@ -70,7 +70,7 @@ socket.on('connect', function () {
 
 socket.on("changeController", (controller) => {
     console.log(`Received ${controller.name}: ${controller.value}`);
-    var oscPayload = controllerToOscArray(controller);
+    const oscPayload = controllerToOscArray(controller);
     oscPayload.push("address");
     oscPayload.push("changeController");
 

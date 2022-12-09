@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useSocketIO } from "../services/socketio.service";
-import { Controller } from "../../../communication";
+import { Controller } from "../communication";
 import { Ref, ref } from "vue";
 import ControllerSlider from "./ControllerSlider.vue"
 import ControllerButton from "./ControllerButton.vue";

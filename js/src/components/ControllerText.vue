@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { defineProps, ref, Ref, PropType } from "vue";
 import { useSocketIO } from "../services/socketio.service";
-import { ButtonController } from "../../../communication";
+import { TextController } from "../communication";
 
 const { socket } = useSocketIO();
 
 const props = defineProps({
-  controller: {type: Object as PropType<ButtonController>, required: true}
+  controller: {type: Object as PropType<TextController>, required: true}
 });
 
-var value: Ref<number> = ref(props.controller.value);
+var value: Ref<string> = ref(props.controller.value);
 
-async function buttonPress() {
+async function updateText() {
     // as we can not update props in vue
     // we instead copy it and use it to set the values
     var c = structuredClone({...props.controller});
@@ -26,12 +26,11 @@ async function buttonPress() {
       <v-col>
         <div>
           <div class="text-caption">{{ $props.controller.name }}</div>
-          <v-btn
+          <v-textarea
             v-model="value"
-            @click="buttonPress()"
+            @change="updateText()"
             color="orange"
-            label="color"
-          >{{ $props.controller.name }}</v-btn>
+          />
         </div>
       </v-col>
     </v-row>

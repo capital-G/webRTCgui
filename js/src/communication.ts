@@ -34,4 +34,3 @@ export interface ClientToServerEvents {
     controllerUpdate: (controller: Controller) => void;
     changeController: (controller: Controller) => void;
 }
-

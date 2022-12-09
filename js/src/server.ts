@@ -1,10 +1,11 @@
-import * as express from "express";
+import { Express} from 'express';
+import express from 'express';
 import {createServer, Server} from "http";
 import {Server as SocketServer} from "socket.io";
 import {ServerToClientEvents, ClientToServerEvents, Controller} from "./communication";
 
 export class SuperColliderWebRtcServer {
-  app: express.Express;
+  app: Express;
   path = __dirname + '/frontend/dist/';
   http: Server;
   io: SocketServer<ClientToServerEvents, ServerToClientEvents>;
@@ -36,26 +37,26 @@ export class SuperColliderWebRtcServer {
     }
 
     this.controllers = {};
-    
+
     this.setupApp();
     this.setupSocket();
-  };
+  }
 
   setupApp() {
     this.app.get('/', (req, res) => {
       res.sendFile(this.path + "index.html");
     });
-    
+
     this.app.get('/live', (req, res) => {
       res.sendStatus(200);
-    }); 
+    });
   }
 
   setupSocket() {
     this.io.on("connection", (socket) => {
       const token = socket.handshake.auth.token;
       let auth: boolean = true;
-    
+
       if(this.authToken) {
         if(this.authToken!=token) {
           auth = false;
@@ -66,22 +67,22 @@ export class SuperColliderWebRtcServer {
           console.log("Client with proper credentials connected");
         }
       }
-    
+
       socket.on("getState", () => {
         console.log("update state to new client");
         socket.emit("controllers", this.controllers);
       })
-    
+
       socket.on("getStateController", (name) => {
         socket.emit("changeController", this.controllers[name]);
       });
-    
+
       socket.on("registerController", (controller) => {
         if(!auth) {
           console.log("WARNING: Got unauthorized new controller statement");
           return;
         }
-    
+
         // console.log("Publish new controller " + JSON.stringify(msg));
         // controllers[msg['name']] = msg;
         // console.log(controllers);
@@ -90,7 +91,7 @@ export class SuperColliderWebRtcServer {
         this.controllers[controller.name] = controller;
         socket.broadcast.emit("controllers", this.controllers);
       });
-    
+
       socket.on("removeController", (controller) => {
         if(!auth) {
           console.log("WARNING: Got unauthorized remove controller statement");
@@ -100,7 +101,7 @@ export class SuperColliderWebRtcServer {
         delete this.controllers[controller.name];
         socket.broadcast.emit("controllers", this.controllers);
       });
-    
+
       socket.on("reset", () => {
         if(!auth) {
           console.log("WARNING: Got unauthorized reset statement");
@@ -110,12 +111,12 @@ export class SuperColliderWebRtcServer {
         this.controllers = {};
         socket.broadcast.emit("controllers", this.controllers);
       });
-    
+
       socket.on("changeController", (controller) => {
         console.log(`Received ${controller.name}: ${controller.value}`);
-    
+
         this.controllers[controller.name].value = controller.value;
-    
+
         socket.broadcast.emit("changeController", controller);
       });
     });

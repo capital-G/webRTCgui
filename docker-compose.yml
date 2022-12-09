@@ -17,7 +17,6 @@ services:
       - backend
     volumes:
       - ./client.ts:/root/web_rtc_gui/client.ts
-      - ./communication.ts:/root/web_rtc_gui/communication.ts
     ports:
       - 57220:57220/udp
     environment:

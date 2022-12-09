@@ -9,12 +9,11 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import ControlPanel from './components/ControlPanel.vue';
-
 @Options({
   components: {
     ControlPanel,
   },
 })
-export default class App extends Vue { 
+export default class App extends Vue {
 }
 </script>
