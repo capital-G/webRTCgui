@@ -1,0 +1,32 @@
+@startuml
+
+rectangle "Local" {
+    frame client {
+      rectangle "localhost:57220" as LocalClient
+    }
+    frame frontend {
+      rectangle "localhost:8080" as LocalFrontend
+    }
+    frame backend {
+      rectangle "localhost:3000" as LocalServer
+    }
+
+  frame "SuperCollider" {
+    rectangle "localhost:57120" as sclang
+  }
+}
+
+cloud "Remote Clients" as RemoteClients
+
+
+RemoteClients <- LocalFrontend : "http"
+
+RemoteClients <-> LocalServer : "WebRTC"
+
+
+LocalClient <--> LocalServer : "WebRTC"
+
+sclang <-> LocalClient : "OSC"
+
+
+@enduml

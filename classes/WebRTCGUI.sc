@@ -68,8 +68,8 @@ WebRTCGUI {
 			// hardcoded for now
 			"type", "slider",
 			"value", spec.storeArgs[4],
-			"specMinVal", spec.storeArgs[0],
-			"specMaxVal", spec.storeArgs[1],
+			"min", spec.storeArgs[0],
+			"max", spec.storeArgs[1],
 		);
 	}
 
@@ -83,6 +83,21 @@ WebRTCGUI {
 			"name", name,
 			"type", "button",
 			"value", 0,
+		);
+	}
+
+	newText {|name, spec, callback|
+		callback = callback ? {};
+		controllers[name.asSymbol] = (
+			spec: spec,
+			callback: callback,
+		);
+
+		client.sendMsg(
+			"/registerController",
+			"name", name,
+			"type", "text",
+			"value", spec.default ? "",
 		);
 	}
 

@@ -1,9 +1,9 @@
 version: '3.0'
 
 services:
-  backend:
-    build: .
-    entrypoint: [ "node", "server.js"]
+  server:
+    build:
+      context: js
     environment:
       - BACKEND_AUTH_TOKEN=change_me
     healthcheck:
@@ -12,15 +12,15 @@ services:
       - 3000:3000
 
   client:
-    build: .
+    build:
+      context: js
+    entrypoint: ["npm", "run", "client"]
     depends_on:
       - backend
-    volumes:
-      - ./client.js:/root/web_rtc_gui/client.js
     ports:
       - 57220:57220/udp
     environment:
       - SC_HOST=host.docker.internal
-      - SC_PORT=57120
-      - BACKEND_ADDRESS=http://backend:3000
+      - SC_PORT=${SC_PORT:-57120}
+      - BACKEND_ADDRESS=http://server:3000
       - BACKEND_AUTH_TOKEN=change_me

@@ -1,24 +1,22 @@
 # webRTCgui
 
-*webRTCgui* allows to create dynamic GUI elements in the internet or local network from within SuperCollider.
-Clients get synced among each other and movements in the GUI gets also
-forwarded to SuperCollider.
+> *webRTCgui* allows to publish, modify and sync dynamic GUI elements / parameters via the internet (or local network) from within SuperCollider.
 
-![Screen recording](docs/screen_recording.gif)
+![Screen recording](HelpSource/Classes/images/screen_recording.gif)
 
-This GUI also syncs across multiple devices, also across the internet.
+This GUI parameters syncs across multiple devices, also across the internet.
 
-As SuperCollider can not directly communicate via WebRTC we need some translational layers.
+As SuperCollider can not directly communicate via WebRTC we need a translation layer to do the network lifting.
 To get a better understanding we quickly explain each component involved.
 
 Service | Folder | Description
 --- | --- | ---
-Backend | `.` | A express server which distributes the necessary messages. Can run on your local machine or remote machine.
-Frontend | `./frontend` | A frontend through which outside clients can interact. Should run on the same machine as the backend.
-Client | `.` | Client to translate WebRTC to SuperCollider OSC messages. Needs to run on your local machine.
+Server | `js/server.ts` | A express server which serves the frontend and distributes the necessary messages for communication. You can run this your local machine or on a remote machine (server) if you want to publish the GUI via the internet.
+Frontend | `js/src` | A vue.js 3 frontend / website through which clients can interact and view the available parameters. Should run on the same machine as the backend and in default the server cares for this.
+Client | `js/client.ts` | Our translation layer between SuperCollider OSC messages and the WebRTC server. This needs to run on your local machine.
 SuperCollider | `./classes` | A simple Quark with the class `WebRTCGUI`. Should be used on your local machine.
 
-## Installation
+## Setup
 
 ### SuperCollider
 
@@ -30,78 +28,79 @@ Quarks.install("https://github.com/capital-G/webRTCgui.git");
 thisProcess.platform.recompile;
 ```
 
-### Services
+### WebRTC
+
+Clone the repository to a folder of your choice via
+
+```shell
+git clone https://github.com/capital-G/webRTCgui.git
+cd webRTCgui
+```
 
 The easiest way to set up all necessary services is using [Docker](https://docs.docker.com/get-docker/) with [docker-compose](https://docs.docker.com/compose/install/).
-If you do not want to use Docker take a look at `Dockefile` and `docker-compose.yml` to get a sense on the port mappings and build processes.
 
-### Use on local machine for local network
+#### Local server and client
 
-The easiest way to try this setup is by running everything on your local machine.
-Simply clone the repository by executing the following line within a terminal and a folder of your choice.
+> This assumes that sclang is started on port `57120` which can be verified by executing `NetAddr.langPort` or can be changed by setting e.g. `export SC_PORT=57121`.
 
-```sh
-git clone https://github.com/capital-G/webRTCgui.git
-```
+In order to try it out on your local machine you can type
 
-Now we switch the directory to the just created folder
-
-```sh
-cd webRTCgui
-```
-
-We assume that SuperCollider is running on the default port `57120` which can be verified by running
-
-```supercollider
-NetAddr.langPort;
-```
-
-in the SuperCollider interpreter.
-If these ports do not match up you will not receive any updates from the frontend in SuperCollider.
-Check if any other `sclang` instances are running or modify the port in the `docker-compose.yml` file.
-
-Now we can build and run the Docker containers by executing
-
-```sh
+```shell
 docker-compose up --build
 ```
+Once everything spun up you can access the frontend on <http://localhost:3000> and start creating controls from SuperCollider by reading the docs
 
-Once everything spun up you can access the frontend on <http://localhost:3000> and start creating controls from SuperCollider (see the Help Files in SuperCollider by searching for `WebRTCGUI`).
-
-Other clients within your local network can access the website as well via `http://your_local_ip:3000`.
-
-For the sake of completeness there is a schematic on how the services are connected.
-
-![Local setup](docs/local.svg)
-
-### Use on remote machine for internet
-
-Deploying the service on a remote machine allows you to connect globally to the GUI.
-One of the nice things about WebRTC is that it can bypass some P2P obstacles such as IPv6 or a firewall, so most likely you do not have to worry about these things.
-
-We assume that you run a linux server on which docker, docker-compose and nginx is already installed.
-
-Start by cloning the repo on your remote machine
-
-```sh
-git clone https://github.com/capital-G/webRTCgui.git && \
-cd webRTCgui
+```supercollider
+HelpBrowser.openHelpFor("Classes/WebRTCGUI")
 ```
 
-Spin up the remote setup via
+Other users within your network can also access the website via `http://<your-local-ip>:3000`.
 
-```sh
-docker-compose -f docker-compose.remote.yml up --build
+To understand the connections better here is a schematic on how the services are connected in a local setup.
+
+![Local setup](HelpSource/Classes/images/local.svg)
+
+#### Remote server and local client
+
+Assuming you want to have the website accessible via the internet you need a remote machine on which you can to deploy the server on which you should run
+
+```shell
+# set a password for the server and start the server
+BACKEND_AUTH_TOKEN=someBetterPassword \
+docker compose -f docker-compose.server.yml up --build
 ```
 
-You may add the flag `-d` to make the container run in the background.
+By appending a `-d` flag the service will start in the background.
 
-Check via `curl -f http://localhost:3000` if the server is reachable.
+Make sure you have setup the network properly so the service is reachable by either having port 3000 forwarded in your firewall (e.g. [`ufw`](https://wiki.archlinux.org/title/Uncomplicated_Firewall)) or setting up a reverse proxy (see below).
+If you can see the website you have set it up properly.
 
-If so we can now create and activate a nginx config.
-It is also possible to use an Apache server but I don't have a config for it.
+After this you need to start the client on your local machine which acts as a translation layer between our local SuperCollider instance and the remote server.
 
-Here is an example of such a nginx config file.
+```shell
+# set the password and address from the server and start the local client
+BACKEND_AUTH_TOKEN=someBetterPassword \
+BACKEND_ADDRESS="http://my.ip:3000" \
+docker-compose -f docker-compose.client.yml up --build
+```
+
+If everything worked it should say
+
+```log
+webrtcgui-client-1  | Connected to server
+```
+
+and from there on you can continue with the SuperCollider documentation (see above).
+
+Here are the schematics for a remote workflow with reverse proxy.
+
+![Remote setup](HelpSource/Classes/images/remote.svg)
+
+### Setup a nginx reverse proxy
+
+Using a reverse proxy allows you to secure the application better and also add supports for https certificates to the server which will improve usability across devices.
+
+Here is an example of such a nginx config file which would redirect the traffic from `my-domain.com` to our server.
 
 ```conf
 server {
@@ -125,60 +124,44 @@ server {
 
 Modify it according to your URL and port mappings, restart nginx and let [certbot](https://certbot.eff.org/) give you a certificate for your config.
 
-Verify that you can access the backend server with your browser.
-
-#### Connect te remote machine
-
-Once we set up everything on the remote machine we need to connect our local client to the remote website.
-
-Use the following command in which we prepend the URL and token of our remote service as environment variables which will passed to the service.
-
-```sh
-BACKEND_ADDRESS="https://my-domain.com" BACKEND_AUTH_TOKEN="my_token" docker-compose -f docker-compose.remote_client.yml up --build
-```
-
-If everything worked you should see
-
-```log
-client_1  | Connected to server
-```
-
-#### Schematic
-
-![Remote setup](docs/remote.svg)
+After this you can verify that you can access the server with your browser which should display the frontend website.
 
 ### Authentication
 
+> Please do not use precious passwords as these passwords are transmitted non-encrypted and may get spilled by storing and printing them in plaintext.
+
 To restrict the creation and deletion of GUI elements there needs to some kind of authentication to distinguish between the local client which is attached to SuperCollider and the remote clients, accessing the server via a browser.
-You can use and modify the environment variable `BACKEND_AUTH_TOKEN` in both places of the `docker-compose.yml` file (or respectively any other docker-compose file) to change this token.
-Please do not use precious passwords as these passwords are transmitted non-encrypted and may get spilled by storing and printing them in plaintext.
+You can set the environment variable `BACKEND_AUTH_TOKEN` in the server and client shell to the desired password, e.g.
+
+```shell
+export BACKEND_AUTH_TOKEN=somePassword
+```
 
 ## Development
 
-There is an additional docker-compose file `docker-compose.dev.yml` which allows for hot-reloading and debugging of the Vue frontend by using the Vue development server instead of shipping the static build via an Express server like on the normal build.
+For development we do not rely on the docker environment because it is rather nasty to sync the `node_modules` folder between container and host machine.
+Currently this project uses Node 14 with typescript which makes the development of the communication much more safe as we use type checks on the messages we send and receive.
 
-To use this server please install first all frontend dependencies first by running
+To install all necessary dependencies execute
 
-```sh
-cd frontend
+```shell
+cd js
 npm install
 ```
 
-as we will completely mount and replace the folder in the container with our local instance which would otherwise lack the necessary dependencies in `node_modules`.
+and start the setup via
 
-To use the dev version simply run
-
-```sh
-docker-compose -f docker-compose.dev.yml up --build
+```shell
+npm run local-dev
 ```
 
-The Vue development server is then available under <http://localhost:8080>.
+The Vue development server is then available under <http://localhost:8080>, the server starts under port `3000`.
 
 Please install and setup [`pre-commit`](https://pre-commit.com/) before committing which will run some linting checks.
 
-The schematics of the dev environment are a bit more complex.
+The schematics of the dev environment.
 
-![Dev schematic](docs/dev.svg)
+![Dev schematic](HelpSource/Classes/images/dev.svg)
 
 ## License
 
