@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
 import { defineProps, ref, watch } from "vue";
-import { useSocketIO } from "../services/socketio.service";
+import { socket } from "../services/socketio.service";
 import type { SliderController } from "../communication";
 import { useControllerStore } from "../services/store.service";
 
 const props = defineProps({
   controller: { type: Object as PropType<SliderController>, required: true }
 });
-
-const { socket } = useSocketIO();
 
 const controllerStore = useControllerStore();
 const controller = controllerStore.controllers[props.controller.name];
@@ -38,6 +36,8 @@ watch(controller, (oldValue, newValue) => {
             thumb-label
             @mousedown="userInput = true"
             @mouseup="userInput = false"
+            @touchstart="userInput = true"
+            @touchend="userInput = false"
           />
         </div>
       </v-col>
