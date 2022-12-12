@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## v0.2.1
 
 * Add pinia for state management
 * Change behavior of SocketIO host detection
