@@ -3,6 +3,7 @@ import type { PropType, Ref } from "vue";
 import { defineProps, ref } from "vue";
 import { useSocketIO } from "../services/socketio.service";
 import type { ButtonController } from "../communication";
+import { useControllerStore } from "../services/store.service";
 
 const props = defineProps({
   controller: { type: Object as PropType<ButtonController>, required: true }
@@ -10,14 +11,11 @@ const props = defineProps({
 
 const { socket } = useSocketIO();
 
-const value: Ref<number> = ref(props.controller.value);
+const controllerStore = useControllerStore();
+const controller = controllerStore.controllers[props.controller.name];
 
 async function buttonPress() {
-  // as we can not update props in vue
-  // we instead copy it and use it to set the values
-  const c = structuredClone({ ...props.controller });
-  c.value = value.value;
-  socket.emit("changeController", c);
+  socket.emit("changeController", controller);
 }
 </script>
 
@@ -27,7 +25,7 @@ async function buttonPress() {
       <v-col>
         <div>
           <v-btn
-            v-model="value"
+            v-model="controller.value"
             color="orange"
             @click="buttonPress()"
           >
