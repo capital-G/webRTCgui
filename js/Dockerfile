@@ -9,6 +9,8 @@ RUN npm install
 
 COPY . .
 
+ARG VUE_APP_SOCKET_ENDPOINT
+
 RUN [ "npm", "run",  "build"]
 
 ENTRYPOINT [ "npm", "run", "server" ]

@@ -1,6 +1,6 @@
 {
   "name": "supercollider_web_rtc_gui",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Allows to dynamically create GUIs for the web via SuperCollider",
   "author": "Dennis Scheiba",
@@ -28,19 +28,18 @@
     "core-js": "^3.8.3",
     "express": "^4.17.3",
     "osc": "^2.4.2",
+    "pinia": "^2.0.28",
     "roboto-fontface": "*",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
-    "vuetify": "^3.0.4",
-    "webfontloader": "^1.0.0"
+    "vuetify": "^3.0.4"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.33.1",
     "@types/express": "^4.17.14",
     "@types/node": "^18.11.9",
-    "@types/webfontloader": "^1.6.35",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^8.29.0",

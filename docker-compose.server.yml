@@ -4,6 +4,8 @@ services:
   backend:
     build:
       context: js
+      args:
+        - VUE_APP_SOCKET_ENDPOINT
     entrypoint: [ "npm", "run", "server"]
     environment:
       - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-change_me}
