@@ -7,6 +7,7 @@
 * fix reverse proxy example
 * remove web-font loader as dependency
 * Fix `docker-compose.yml` depends_on bug
+* Reuse same SocketIO connection in app
 
 ## v0.2.0
 
