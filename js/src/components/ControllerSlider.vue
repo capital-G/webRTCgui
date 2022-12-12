@@ -3,6 +3,7 @@ import type { PropType, Ref } from "vue";
 import { defineProps, ref, watch } from "vue";
 import { useSocketIO } from "../services/socketio.service";
 import type { SliderController } from "../communication";
+import { useControllerStore } from "../services/store.service";
 
 const props = defineProps({
   controller: { type: Object as PropType<SliderController>, required: true }
@@ -10,17 +11,15 @@ const props = defineProps({
 
 const { socket } = useSocketIO();
 
-const value: Ref<number> = ref(props.controller.value);
+const controllerStore = useControllerStore();
+const controller = controllerStore.controllers[props.controller.name];
 
-async function sendUpdate() {
-  // as we can not update props in vue
-  // we instead copy it and use it to set the values
-  const c = structuredClone({ ...props.controller });
-  c.value = value.value;
-  socket.emit("changeController", c);
-}
+const userInput: Ref<boolean> = ref(false);
 
-watch(value, sendUpdate);
+watch(controller, (oldValue, newValue) => {
+  if (userInput.value)
+    socket.emit("changeController", controller);
+});
 </script>
 
 <template>
@@ -32,11 +31,13 @@ watch(value, sendUpdate);
             {{ $props.controller.name }}
           </div>
           <v-slider
-            v-model="value"
+            v-model="controller.value"
             color="orange"
             :min="$props.controller.min"
             :max="$props.controller.max"
             thumb-label
+            @mousedown="userInput = true"
+            @mouseup="userInput = false"
           />
         </div>
       </v-col>

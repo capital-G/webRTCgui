@@ -1,28 +1,18 @@
 <script lang="ts" setup>
-import type { Ref } from "vue";
-import { ref } from "vue";
-import { useSocketIO } from "../services/socketio.service";
-import type { Controller } from "../communication";
+import { Ref, computed, ref } from "vue";
+import { useControllerStore } from "../services/store.service";
 import ControllerSlider from "./ControllerSlider.vue";
 import ControllerButton from "./ControllerButton.vue";
 import ControllerText from "./ControllerText.vue";
 
-const controllers: Ref<{ [id: string]: Controller }> = ref({});
-
-const { socket } = useSocketIO();
-
-socket.on("controllers", (newControllers) => {
-  console.log("received", newControllers);
-  controllers.value = newControllers;
-});
-
-socket.emit("getState");
+const controllerStore = useControllerStore();
+const controllersValue = computed(() => controllerStore.controllers);
 </script>
 
 <template>
   <v-container>
     <h2>Controller Panel</h2>
-    <div v-for="controller in controllers" :key="controller.name">
+    <div v-for="controller in controllersValue" :key="controller.name">
       <ControllerSlider
         v-if="controller.type === 'slider'"
         :controller="controller"
