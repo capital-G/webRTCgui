@@ -25,7 +25,17 @@ WebHLayout : WebLayout {}
 
 WebVLayout : WebLayout {}
 
-WebTabLayout : WebLayout {}
+WebTabLayout : WebLayout {
+	var <tabs;
+
+	*new { |tabs|
+		^super.newCopyArgs.init(tabs);
+	}
+
+	init { |t|
+		tabs = t;
+	}
+}
 
 
 WebRTCGUI {
@@ -131,7 +141,7 @@ WebRTCGUI {
 		^(
 			value: 0,
 			type: "button",
-			states: v.states.collect({|state|
+			states: (v.states?[["Button"]]).collect({|state|
 				(
 					text: state[0] ? "",
 					color: this.color(state[1] ? Color.black),
@@ -163,7 +173,17 @@ WebRTCGUI {
 			controllers: v.items.collect({|x| this.transform(x)}),
 			type: "v-layout",
 		)
+	}
 
+	tabLayout {|v|
+		var controllers = ();
+		v.tabs.pairsDo({|k, v|
+			controllers[k] = this.transform(v);
+		});
+		^(
+			controllers: controllers,
+			type: "tab-layout",
+		).postln;
 	}
 
 	transform {|v|
@@ -171,7 +191,8 @@ WebRTCGUI {
 		{v.isKindOf(Button)} {this.button(v)}
 		{v.isKindOf(Slider)} {this.slider(v)}
 		{v.isKindOf(WebHLayout)} {this.hLayout(v)}
-		{v.isKindOf(WebVLayout)} {this.vLayout(v)};
+		{v.isKindOf(WebVLayout)} {this.vLayout(v)}
+		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)};
 		var id = WebRTCGUI.prNextId;
 		controllers[id] = v;
 		val.id = id;

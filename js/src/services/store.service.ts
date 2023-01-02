@@ -24,6 +24,11 @@ export const useControllerStore = defineStore("controllers", () => {
         addController(controller);
       });
     }
+    if (newController.type === "tab-layout") {
+      Object.keys(newController.controllers).forEach((tabName) => {
+        addController(newController.controllers[tabName]);
+      });
+    }
     dataControllers.value[newController.id] = newController;
   };
 
