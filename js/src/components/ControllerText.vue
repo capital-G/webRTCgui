@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
 import { defineProps, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { socket } from "../services/socketio.service";
 import type { TextController } from "../communication";
 import { useControllerStore } from "../services/store.service";
@@ -10,7 +11,8 @@ const props = defineProps({
 });
 
 const controllerStore = useControllerStore();
-const controller = controllerStore.controllers[props.controller.name];
+const { dataControllers } = storeToRefs(controllerStore);
+const controller = dataControllers.value[props.controller.id];
 
 async function updateText() {
   socket.emit("changeController", controller);

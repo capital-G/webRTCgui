@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
 import { defineProps, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { socket } from "../services/socketio.service";
 import type { SliderController } from "../communication";
 import { useControllerStore } from "../services/store.service";
@@ -10,13 +11,14 @@ const props = defineProps({
 });
 
 const controllerStore = useControllerStore();
-const controller = controllerStore.controllers[props.controller.name];
+const { dataControllers } = storeToRefs(controllerStore);
+const controller = dataControllers.value[props.controller.id] as SliderController;
 
 const userInput: Ref<boolean> = ref(false);
 
 watch(controller, (oldValue, newValue) => {
   if (userInput.value)
-    socket.emit("changeController", controller);
+    socket.emit("updateController", controller);
 });
 </script>
 

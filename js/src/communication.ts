@@ -1,4 +1,27 @@
-export interface SliderController {
+interface ControllerBase {
+  id: string
+}
+
+export interface ControllerColor {
+  r: number
+  g: number
+  b: number
+  a: number
+}
+
+export interface VLayoutController extends ControllerBase {
+  controllers: Array<Controller>
+  value: "noValue"
+  type: "v-layout"
+}
+
+export interface HLayoutController extends ControllerBase {
+  controllers: Array<Controller>
+  value: "noValue"
+  type: "h-layout"
+}
+
+export interface SliderController extends ControllerBase {
   name: string
   value: number
   max: number
@@ -6,32 +29,39 @@ export interface SliderController {
   type: "slider"
 }
 
-export interface ButtonController {
-  name: string
-  value: number
+interface ButtonState {
+  text: string
+  color: ControllerColor
+  backgroundColor: ControllerColor
+}
+
+export interface ButtonController extends ControllerBase {
+  states: Array<ButtonState>
+  value: number // curState
   type: "button"
 }
 
-export interface TextController {
+export interface TextController extends ControllerBase {
   name: string
   value: string
   type: "text"
   monospace: boolean
 }
 
-export type Controller = SliderController | ButtonController | TextController;
+export type Controller =
+  SliderController
+  | ButtonController
+  | TextController
+  | VLayoutController
+  | HLayoutController;
 
 export interface ServerToClientEvents {
-  controllers: (controllers: { [id: string]: Controller }) => void
-  changeController: (controller: Controller) => void
+  setLayout: (controller: Controller) => void
+  updateController: (controller: Controller) => void
 }
 
 export interface ClientToServerEvents {
-  getState: () => void
-  getStateController: (name: string) => void
-  registerController: (controller: Controller) => void
-  removeController: (controller: Controller) => void
-  reset: () => void
-  controllerUpdate: (controller: Controller) => void
-  changeController: (controller: Controller) => void
+  getLayout: () => void
+  setLayout: (controller: Controller) => void
+  updateController: (controller: Controller) => void
 }
