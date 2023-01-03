@@ -25,7 +25,19 @@ WebHLayout : WebLayout {}
 
 WebVLayout : WebLayout {}
 
-WebTabLayout : WebLayout {}
+WebTabLayout : WebLayout {
+	var <tabs;
+
+	*new { |tabs|
+		^super.newCopyArgs.init(tabs);
+	}
+
+	init { |t|
+		tabs = t;
+	}
+}
+
+WebVerticalTabLayout : WebTabLayout {}
 
 
 WebRTCGUI {
@@ -131,7 +143,7 @@ WebRTCGUI {
 		^(
 			value: 0,
 			type: "button",
-			states: v.states.collect({|state|
+			states: (v.states?[["Button"]]).collect({|state|
 				(
 					text: state[0] ? "",
 					color: this.color(state[1] ? Color.black),
@@ -145,9 +157,9 @@ WebRTCGUI {
 		^(
 			value: v.value,
 			type: "slider",
-			min: 0.0,
-			max: 1.0,
-			name: "a slider",
+			min: v.isKindOf(EZSlider).if({v.controlSpec.minval}, { 0 }),
+			max: v.isKindOf(EZSlider).if({v.controlSpec.maxval}, { 1.0 }),
+			name: v.isKindOf(EZSlider).if({v.label ? "a ezslider"}, {"a slider"}),
 		);
 	}
 
@@ -163,15 +175,40 @@ WebRTCGUI {
 			controllers: v.items.collect({|x| this.transform(x)}),
 			type: "v-layout",
 		)
+	}
 
+	tabLayout {|v|
+		var controllers = ();
+		v.tabs.pairsDo({|k, v|
+			controllers[k] = this.transform(v);
+		});
+		^(
+			controllers: controllers,
+			type: "tab-layout",
+		);
+	}
+
+	verticalTabLayout {|v|
+		var val = this.tabLayout(v);
+		val[\type] = "vertical-tab-layout";
+		^val;
+	}
+
+	ndef {|v|
+		^this.transform(WebVLayout(*Ndef(v.key).getKeysValues.collect({|x|
+			EZSlider(label: x[0], initVal: x[1]).action_({|e| Ndef(v.key).set(x[0], e.value)});
+		})));
 	}
 
 	transform {|v|
 		var val = case
 		{v.isKindOf(Button)} {this.button(v)}
-		{v.isKindOf(Slider)} {this.slider(v)}
+		{v.isKindOf(Slider).or(v.isKindOf(EZSlider))} {this.slider(v)}
 		{v.isKindOf(WebHLayout)} {this.hLayout(v)}
-		{v.isKindOf(WebVLayout)} {this.vLayout(v)};
+		{v.isKindOf(WebVLayout)} {this.vLayout(v)}
+		{v.isKindOf(WebVerticalTabLayout)} {this.verticalTabLayout(v)}
+		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)}
+		{v.isKindOf(Ndef)} {this.ndef(v)};
 		var id = WebRTCGUI.prNextId;
 		controllers[id] = v;
 		val.id = id;

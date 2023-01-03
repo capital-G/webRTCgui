@@ -7,6 +7,8 @@ import ControllerButton from "./ControllerButton.vue";
 import ControllerText from "./ControllerText.vue";
 import ControllerVLayout from "./ControllerVLayout.vue";
 import ControllerHLayout from "./ControllerHLayout.vue";
+import ControllerTabLayout from "./ControllerTabLayout.vue";
+import ControllerVerticalTabLayoutVue from "./ControllerVerticalTabLayout.vue";
 
 const props = defineProps({
   controller: { type: Object as PropType<Controller>, required: true }
@@ -33,8 +35,12 @@ const controllerData = computed(() => props.controller);
       v-if="props.controller.type === 'v-layout'"
       :controller="props.controller"
     />
-    <ControllerHLayout
-      v-if="props.controller.type === 'h-layout'"
+    <ControllerTabLayout
+      v-if="props.controller.type === 'tab-layout'"
+      :controller="props.controller"
+    />
+    <ControllerVerticalTabLayoutVue
+      v-if="props.controller.type === 'vertical-tab-layout'"
       :controller="props.controller"
     />
   </v-container>
