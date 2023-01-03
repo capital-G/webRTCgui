@@ -1,10 +1,63 @@
+/*
+ideas:
+add primary, secondary to Color?
+
+problems:
+how could updates work properly from within supercollider?
+when do we know to release stuff?
+what could be a way to add additional styling beyond the default gui ones?
+*/
+
+
+WebLayout {
+	var <>items;
+
+	*new { arg ...newItems;
+		^super.newCopyArgs().init(newItems);
+	}
+
+	init {|newItems|
+		items = newItems;
+	}
+}
+
+WebHLayout : WebLayout {}
+
+WebVLayout : WebLayout {}
+
+WebTabLayout : WebLayout {
+	var <tabs;
+
+	*new { |tabs|
+		^super.newCopyArgs.init(tabs);
+	}
+
+	init { |t|
+		tabs = t;
+	}
+}
+
+WebVerticalTabLayout : WebTabLayout {}
+
+
 WebRTCGUI {
+	classvar curId;
 	var clientHost;
 	var clientPort;
 
 	var client;
+	var <layout;
 	var <controllers;
 	var oscDefName;
+
+	*initClass {
+		curId = 0;
+	}
+
+	*prNextId {
+		curId = curId + 1;
+		^curId;
+	}
 
 
 	*new {|clientHost="localhost", clientPort=57220|
@@ -16,107 +69,149 @@ WebRTCGUI {
 
 	init {
 		client = NetAddr(clientHost, clientPort);
+		layout = WebHLayout();
 		controllers = ();
-		oscDefName = "WebRTCGUIbackchannel_%_%".format(clientHost, clientPort);
-		this.prSetupUpdate.();
-	}
-
-	*prArrayToEvent {|a|
-		var e = ();
-		a.pairsDo({|k, v|
-			e[k.asSymbol] = v;
-		});
-		^e;
+		this.prSetupUpdate;
 	}
 
 	prSetupUpdate {
-		OSCdef(oscDefName, {|msg|
-			var e = WebRTCGUI.prArrayToEvent(msg[1..]);
-			var controller = this.getController(e[\name]);
+		OSCdef("webRtcGui_%_%".format(clientHost, clientPort), {|msg|
+			var e = msg[1].asString.parseJSON;
+			var controller = controllers[e["id"].asInteger];
 
-			switch(e[\address].asSymbol,
-				"changeController".asSymbol, {
-					if(controller.isNil, {
-						"received value (%) for unknown controller %".format(e[\value], e[\name]).warn;
-					}, {
-						controller[\callback].(e[\value]);
-					});
-				},
-				{"Received message with unknow address: %".format(e).warn;}
-			);
+			if(controller.isNil, {
+				"received value % for unknown controller %".format(e["value"], e["id"]).warn;
+			}, {
+				{controller.valueAction_(e["value"])}.defer;
+			});
 		}, path: "/WebRTCGUIbackchannel");
 	}
 
 	reset {
-		client.sendMsg("/reset");
+		layout = WebHLayout();
 		controllers = ();
+		this.updateControllers;
 		"Resetted controllers".postln;
 	}
 
-	newSlider {|name, spec, callback|
-		callback = callback ? {};
-		name = name;
-		controllers[name.asSymbol] = (
-			spec: spec,
-			callback: callback
-		);
-
-		// send [k1, v1, k2, v2,...]
+	updateControllers {
 		client.sendMsg(
-			"/registerController",
-			"name", name,
-			// hardcoded for now
-			"type", "slider",
-			"value", spec.storeArgs[4],
-			"min", spec.storeArgs[0],
-			"max", spec.storeArgs[1],
+			"/setLayout",
+			WebRTCGUI.toJson(this.transform(layout)),
 		);
 	}
 
-	newButton {|name, callback|
-		controllers[name.asSymbol] = (
-			callback: callback,
-		);
+	layout_ {|l|
+		layout = l;
+		this.updateControllers;
+	}
 
-		client.sendMsg(
-			"/registerController",
-			"name", name,
-			"type", "button",
-			"value", 0,
+	*toJson {|v|
+		var string, array;
+		var value = case
+		{ v.isString } { v.replace("\n", "\\n").quote }
+		{ v.isNil } { "null" }
+		{ v.isKindOf(Boolean) } { v }
+		{ v.isNumber } { v.asCompileString }
+		{ v.isKindOf(Symbol) } { WebRTCGUI.toJson(v.asString) }
+		{ v.isKindOf(Association) } { WebRTCGUI.toJson([v].asDict) }
+		{ v.isKindOf(SequenceableCollection) } {
+			array = v.collect { |x| WebRTCGUI.toJson(x) };
+			"[ % ]".format(array.join(", "))
+		}
+		{ v.isKindOf(Dictionary) } {
+			array = v.asAssociations.collect { |x| "%: %".format(WebRTCGUI.toJson(x.key), WebRTCGUI.toJson(x.value)) };
+			"{ % }".format(array.join(", "))
+		}
+		{ v.asCompileString.quote };
+		^value;
+	}
+
+	// these are non static because controllers can be recursive
+	// and need to generate IDs which are mapped to the
+	// controller dict for the callbacks
+	color {|v|
+		^(
+			r: v.red*255.0,
+			g: v.green*255.0,
+			b: v.blue*255.0,
+			a: v.alpha*1.0,  // alpha is between 0 and 1
+		)
+	}
+
+	button {|v|
+		^(
+			value: 0,
+			type: "button",
+			states: (v.states?[["Button"]]).collect({|state|
+				(
+					text: state[0] ? "",
+					color: this.color(state[1] ? Color.black),
+					backgroundColor: this.color(state[2] ? Color.white),
+				)
+			});
+		)
+	}
+
+	slider {|v|
+		^(
+			value: v.value,
+			type: "slider",
+			min: v.isKindOf(EZSlider).if({v.controlSpec.minval}, { 0 }),
+			max: v.isKindOf(EZSlider).if({v.controlSpec.maxval}, { 1.0 }),
+			name: v.isKindOf(EZSlider).if({v.label ? "a ezslider"}, {"a slider"}),
 		);
 	}
 
-	newText {|name, callback, text="", monospace=true|
-		callback = callback ? {};
-		controllers[name.asSymbol] = (
-			spec: (),
-			callback: callback,
-		);
-
-		client.sendMsg(
-			"/registerController",
-			"name", name,
-			"type", "text",
-			"value", text,
-			"monospace", monospace,
-		);
+	hLayout {|v|
+		^(
+			controllers: v.items.collect({|x| this.transform(x)}),
+			type: "h-layout",
+		)
 	}
 
-	removeController {|name|
-		var c = this.getController(name);
-		if(c.isNil, {
-			"Did not find controller %".format(name).postln;
-		}, {
-			client.sendMsg(
-				"/removeController",
-				"name", name,
-			);
-			controllers[name.asSymbol] = nil;
+	vLayout {|v|
+		^(
+			controllers: v.items.collect({|x| this.transform(x)}),
+			type: "v-layout",
+		)
+	}
+
+	tabLayout {|v|
+		var controllers = ();
+		v.tabs.pairsDo({|k, v|
+			controllers[k] = this.transform(v);
 		});
-
+		^(
+			controllers: controllers,
+			type: "tab-layout",
+		);
 	}
 
-	getController { |name|
-		^controllers[name.asSymbol];
+	verticalTabLayout {|v|
+		var val = this.tabLayout(v);
+		val[\type] = "vertical-tab-layout";
+		^val;
+	}
+
+	ndef {|v|
+		^this.transform(WebVLayout(*Ndef(v.key).getKeysValues.collect({|x|
+			EZSlider(label: x[0], initVal: x[1]).action_({|e| Ndef(v.key).set(x[0], e.value)});
+		})));
+	}
+
+	transform {|v|
+		var val = case
+		{v.isKindOf(Button)} {this.button(v)}
+		{v.isKindOf(Slider).or(v.isKindOf(EZSlider))} {this.slider(v)}
+		{v.isKindOf(WebHLayout)} {this.hLayout(v)}
+		{v.isKindOf(WebVLayout)} {this.vLayout(v)}
+		{v.isKindOf(WebVerticalTabLayout)} {this.verticalTabLayout(v)}
+		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)}
+		{v.isKindOf(Ndef)} {this.ndef(v)};
+		var id = WebRTCGUI.prNextId;
+		controllers[id] = v;
+		val.id = id;
+		^val;
 	}
 }

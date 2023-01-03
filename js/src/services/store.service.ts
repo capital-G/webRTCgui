@@ -2,27 +2,50 @@ import { defineStore } from "pinia";
 import type { Ref } from "vue";
 import { ref } from "vue";
 import { socket } from "./socketio.service";
-import type { Controller } from "@/communication";
+import type { Controller, HLayoutController } from "@/communication";
 
 export const useControllerStore = defineStore("controllers", () => {
-  const controllers: Ref<{ [id: string]: Controller }> = ref({});
+  // responsible for the dom
+  const controller: Ref<Controller> = ref({} as HLayoutController);
+  // this is a flat store because we have nested elements but it is
+  // nasty to search for the component in a nested tree, therefore
+  // we keep a copy of data storages here
+  const dataControllers: Ref<{ [id: string]: Controller }> = ref({});
 
-  socket.on("controllers", (newControllers) => {
-    console.log("received", newControllers);
-    setControllers(newControllers);
-  });
-
-  socket.on("changeController", (controller) => {
+  socket.on("updateController", (controller) => {
     console.log("received change controller", controller);
-    const c = controllers.value[controller.name];
+    const c = dataControllers.value[controller.id];
     c.value = controller.value;
   });
 
-  socket.emit("getState");
+  const addController = (newController: Controller) => {
+    if (newController.type === "h-layout" || newController.type === "v-layout") {
+      newController.controllers.forEach((controller) => {
+        addController(controller);
+      });
+    }
+    if (newController.type === "tab-layout" || newController.type === "vertical-tab-layout") {
+      Object.keys(newController.controllers).forEach((tabName) => {
+        addController(newController.controllers[tabName]);
+      });
+    }
+    dataControllers.value[newController.id] = newController;
+  };
 
-  function setControllers(newControllers: { [id: string]: Controller }) {
-    controllers.value = newControllers;
-  }
+  const setController = (newController: Controller) => {
+    console.log(newController);
+  };
 
-  return { controllers, setControllers };
+  socket.on("setLayout", (newController) => {
+    console.log("received", newController);
+    dataControllers.value = {};
+    controller.value = {} as HLayoutController;
+    controller.value = newController;
+    addController(newController);
+  });
+
+  // get layout on start of store/app
+  socket.emit("getLayout");
+
+  return { controller, dataControllers, setController };
 });

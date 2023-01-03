@@ -33,35 +33,12 @@ const udpPort = new osc.UDPPort({
 });
 udpPort.open();
 
-function oscToDict(msg: [any]): {} {
-  // transforms [k1, v1, k2, v2, ...] to {k1: v1, k2: v2, ...}
-  const o = {};
-  for (let i = 0; i <= msg.length - 1; i = i + 2) {
-    // @ts-expect-error pairs of types can not be represented nicely
-    o[msg[i]] = msg[i + 1];
-  }
-  return o;
-}
-
-function controllerToOscArray(controller: Controller): Array<any> {
-  // transforms {k1: v1, k2: v2, ...} to [k1, v1, k2, v2, ...]
-  // please no nested/deep objects
-  const a = [];
-
-  let key: keyof typeof controller;
-  for (key in controller) {
-    a.push(key);
-    a.push(controller[key]);
-  }
-  return a;
-}
-
 udpPort.on("message", (oscMessage: any) => {
-  const jsonPayload = oscToDict(oscMessage.args);
+  const jsonPayload = JSON.parse(oscMessage.args[0]);
   console.log(`Received OSC message ${JSON.stringify(jsonPayload)}`);
   socket.emit(
     oscMessage.address.substring(1),
-    jsonPayload
+    jsonPayload as Controller
   );
 });
 
@@ -69,15 +46,11 @@ socket.on("connect", () => {
   console.log("Connected to server");
 });
 
-socket.on("changeController", (controller) => {
-  console.log(`Received ${controller.name}: ${controller.value}`);
-  const oscPayload = controllerToOscArray(controller);
-  oscPayload.push("address");
-  oscPayload.push("changeController");
-
+socket.on("updateController", (controller) => {
+  console.log(`Received ${controller.id}: ${controller.value}`);
   udpPort.send({
     address: "/WebRTCGUIbackchannel",
-    args: oscPayload
+    args: JSON.stringify(controller)
   });
 });
 

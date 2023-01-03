@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
 import { defineProps, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { socket } from "../services/socketio.service";
 import type { ButtonController } from "../communication";
+import { toCssColor } from "../helper";
 import { useControllerStore } from "../services/store.service";
 
 const props = defineProps({
@@ -10,10 +12,12 @@ const props = defineProps({
 });
 
 const controllerStore = useControllerStore();
-const controller = controllerStore.controllers[props.controller.name];
+const { dataControllers } = storeToRefs(controllerStore);
+const dataController = dataControllers.value[props.controller.id] as ButtonController;
 
 async function buttonPress() {
-  socket.emit("changeController", controller);
+  dataController.value = (dataController.value + 1) % dataController.states.length;
+  socket.emit("updateController", dataController);
 }
 </script>
 
@@ -23,11 +27,10 @@ async function buttonPress() {
       <v-col>
         <div>
           <v-btn
-            v-model="controller.value"
-            color="orange"
+            :color="toCssColor(dataController.states[dataController.value].backgroundColor)"
             @click="buttonPress()"
           >
-            {{ $props.controller.name }}
+            {{ dataController.states[controller.value].text }}
           </v-btn>
         </div>
       </v-col>
