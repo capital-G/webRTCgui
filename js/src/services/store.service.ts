@@ -14,8 +14,8 @@ export const useControllerStore = defineStore("controllers", () => {
 
   socket.on("updateController", (controller) => {
     console.log("received change controller", controller);
-    // const c = controllers.value[controller.id];
-    // c.value = controller.value;
+    const c = dataControllers.value[controller.id];
+    c.value = controller.value;
   });
 
   const addController = (newController: Controller) => {
