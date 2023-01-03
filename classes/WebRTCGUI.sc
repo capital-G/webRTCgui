@@ -157,9 +157,9 @@ WebRTCGUI {
 		^(
 			value: v.value,
 			type: "slider",
-			min: 0.0,
-			max: 1.0,
-			name: "a slider",
+			min: v.isKindOf(EZSlider).if({v.controlSpec.minval}, { 0 }),
+			max: v.isKindOf(EZSlider).if({v.controlSpec.maxval}, { 1.0 }),
+			name: v.isKindOf(EZSlider).if({v.label ? "a ezslider"}, {"a slider"}),
 		);
 	}
 
@@ -194,16 +194,21 @@ WebRTCGUI {
 		^val;
 	}
 
-
+	ndef {|v|
+		^this.transform(WebVLayout(*Ndef(v.key).getKeysValues.collect({|x|
+			EZSlider(label: x[0], initVal: x[1]).action_({|e| Ndef(v.key).set(x[0], e.value)});
+		})));
+	}
 
 	transform {|v|
 		var val = case
 		{v.isKindOf(Button)} {this.button(v)}
-		{v.isKindOf(Slider)} {this.slider(v)}
+		{v.isKindOf(Slider).or(v.isKindOf(EZSlider))} {this.slider(v)}
 		{v.isKindOf(WebHLayout)} {this.hLayout(v)}
 		{v.isKindOf(WebVLayout)} {this.vLayout(v)}
 		{v.isKindOf(WebVerticalTabLayout)} {this.verticalTabLayout(v)}
-		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)};
+		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)}
+		{v.isKindOf(Ndef)} {this.ndef(v)};
 		var id = WebRTCGUI.prNextId;
 		controllers[id] = v;
 		val.id = id;
