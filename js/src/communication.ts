@@ -27,6 +27,12 @@ export interface TabLayoutController extends ControllerBase {
   type: "tab-layout"
 }
 
+export interface VerticalTabLayoutController extends ControllerBase {
+  controllers: { [name: string]: Controller }
+  value: "noValue"
+  type: "vertical-tab-layout"
+}
+
 export interface SliderController extends ControllerBase {
   name: string
   value: number
@@ -60,17 +66,20 @@ export type Controller =
   | TextController
   | VLayoutController
   | HLayoutController
-  | TabLayoutController;
+  | TabLayoutController
+  | VerticalTabLayoutController;
 
 export type NestedController =
   VLayoutController
   | HLayoutController
-  | TabLayoutController;
+  | TabLayoutController
+  | VerticalTabLayoutController;
 
 export const nestedControllerTypes = [
   "v-layout",
   "h-layout",
-  "tab-layout"
+  "tab-layout",
+  "vertical-tab-layout"
 ];
 
 export interface ServerToClientEvents {

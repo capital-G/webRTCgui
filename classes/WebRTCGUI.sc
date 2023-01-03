@@ -37,6 +37,8 @@ WebTabLayout : WebLayout {
 	}
 }
 
+WebVerticalTabLayout : WebTabLayout {}
+
 
 WebRTCGUI {
 	classvar curId;
@@ -183,8 +185,16 @@ WebRTCGUI {
 		^(
 			controllers: controllers,
 			type: "tab-layout",
-		).postln;
+		);
 	}
+
+	verticalTabLayout {|v|
+		var val = this.tabLayout(v);
+		val[\type] = "vertical-tab-layout";
+		^val;
+	}
+
+
 
 	transform {|v|
 		var val = case
@@ -192,6 +202,7 @@ WebRTCGUI {
 		{v.isKindOf(Slider)} {this.slider(v)}
 		{v.isKindOf(WebHLayout)} {this.hLayout(v)}
 		{v.isKindOf(WebVLayout)} {this.vLayout(v)}
+		{v.isKindOf(WebVerticalTabLayout)} {this.verticalTabLayout(v)}
 		{v.isKindOf(WebTabLayout)} {this.tabLayout(v)};
 		var id = WebRTCGUI.prNextId;
 		controllers[id] = v;
