@@ -1,17 +1,17 @@
 <template>
   <v-app>
     <v-main>
-      <ControlPanel />
+      <ControllerBase />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import ControlPanel from "./components/ControlPanel.vue";
+import ControllerBase from "./components/ControllerBase.vue";
 @Options({
   components: {
-    ControlPanel
+    ControllerBase
   }
 })
 export default class App extends Vue {

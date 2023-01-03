@@ -3,7 +3,7 @@ import { createServer } from "http";
 import type { Express } from "express";
 import express from "express";
 import { Server as SocketServer } from "socket.io";
-import type { ClientToServerEvents, Controller, ServerToClientEvents } from "./communication";
+import type { ClientToServerEvents, Controller, HLayoutController, ServerToClientEvents } from "./communication";
 
 export class SuperColliderWebRtcServer {
   app: Express;
@@ -13,7 +13,7 @@ export class SuperColliderWebRtcServer {
   io: SocketServer<ClientToServerEvents, ServerToClientEvents>;
   authToken = process.env.BACKEND_AUTH_TOKEN || null;
 
-  controllers: { [id: string]: Controller };
+  controller: Controller;
 
   constructor() {
     this.app = express();
@@ -37,7 +37,7 @@ export class SuperColliderWebRtcServer {
     else
       console.log("Run without auth token");
 
-    this.controllers = {};
+    this.controller = {} as HLayoutController;
 
     this.setupApp();
     this.setupSocket();
@@ -69,51 +69,23 @@ export class SuperColliderWebRtcServer {
         }
       }
 
-      socket.on("getState", () => {
+      socket.on("getLayout", () => {
         console.log("update state to new client");
-        socket.emit("controllers", this.controllers);
+        socket.emit("setLayout", this.controller);
       });
 
-      socket.on("getStateController", (name) => {
-        socket.emit("changeController", this.controllers[name]);
+      socket.on("updateController", (controller) => {
+        socket.broadcast.emit("updateController", controller);
       });
 
-      socket.on("registerController", (controller) => {
+      socket.on("setLayout", (controller) => {
+        console.log(controller);
         if (!auth) {
-          console.log("WARNING: Got unauthorized new controller statement");
+          console.log("WARNING - Got unathorized set layout statement");
           return;
         }
-
-        this.controllers[controller.name] = controller;
-        socket.broadcast.emit("controllers", this.controllers);
-      });
-
-      socket.on("removeController", (controller) => {
-        if (!auth) {
-          console.log("WARNING: Got unauthorized remove controller statement");
-          return;
-        }
-        console.log(`Remove controller ${controller.name}`);
-        delete this.controllers[controller.name];
-        socket.broadcast.emit("controllers", this.controllers);
-      });
-
-      socket.on("reset", () => {
-        if (!auth) {
-          console.log("WARNING: Got unauthorized reset statement");
-          return;
-        }
-        console.log("Reset controllers");
-        this.controllers = {};
-        socket.broadcast.emit("controllers", this.controllers);
-      });
-
-      socket.on("changeController", (controller) => {
-        console.log(`Received ${controller.name}: ${controller.value}`);
-
-        this.controllers[controller.name].value = controller.value;
-
-        socket.broadcast.emit("changeController", controller);
+        this.controller = controller;
+        socket.broadcast.emit("setLayout", this.controller);
       });
     });
   }
